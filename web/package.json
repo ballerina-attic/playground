@@ -1,0 +1,33 @@
+{
+  "name": "@ballerina/playground-web",
+  "version": "1.0.0",
+  "description": "A playground for Ballerina Language",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaviththiranga/ballerina-playground.git"
+  },
+  "author": "ballerina.io",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/kaviththiranga/ballerina-playground/issues"
+  },
+  "homepage": "https://github.com/kaviththiranga/ballerina-playground#readme",
+  "devDependencies": {
+    "@types/react": "^16.9.5",
+    "@types/react-dom": "^16.9.1",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.2.0",
+    "typescript": "^3.6.4",
+    "webpack": "^4.41.1",
+    "webpack-cli": "^3.3.9"
+  },
+  "dependencies": {
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2"
+  }
+}
