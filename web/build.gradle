@@ -1,0 +1,11 @@
+task build(type: Exec) {
+    inputs.file("package-lock.json")
+    inputs.file("package.json")
+    inputs.file("webpack.config.js") 
+    inputs.file("tsconfig.json") 
+    inputs.dir("src")
+
+    outputs.dir("dist")      
+
+    commandLine "$projectDir/node_modules/.bin/webpack"
+}
