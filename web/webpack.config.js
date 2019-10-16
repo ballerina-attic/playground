@@ -1,3 +1,6 @@
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var path = require('path');
+
 module.exports = {
     mode: "production",
 
@@ -6,7 +9,7 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [".ts", ".tsx"]
+        extensions: [".ts", ".tsx", ".js"]
     },
 
     module: {
@@ -50,5 +53,16 @@ module.exports = {
     externals: {
         "react": "React",
         "react-dom": "ReactDOM"
-    }
+    },
+
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        compress: true,
+        port: 9000
+    },
+
+    plugins: [new HtmlWebpackPlugin({
+        title: "Ballerina Playground",
+        template: path.join(__dirname, "src", "index.ejs")
+    })]
 };
