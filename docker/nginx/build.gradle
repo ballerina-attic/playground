@@ -1,0 +1,28 @@
+
+plugins {
+    id 'com.palantir.docker' version '0.22.1'
+}
+
+dependencies {
+    project(":frontend")
+}
+
+task copyPublicContent(type: Copy) {
+    from project(":frontend").buildDir
+    into "resources/web" 
+}
+
+task build {
+    dependsOn copyPublicContent
+    inputs.file("Dockerfile")
+    outputs.dir("resources")
+    outputs.dir("build")
+}
+
+docker {
+    dependsOn copyPublicContent
+    name 'hub.docker.com/ballerina.io/playground-web:' + project.version
+    files "resources" 
+}
+
+

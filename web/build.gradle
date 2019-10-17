@@ -9,3 +9,5 @@ task build(type: Exec) {
 
     commandLine "$projectDir/node_modules/.bin/webpack"
 }
+
+buildDir "dist"
