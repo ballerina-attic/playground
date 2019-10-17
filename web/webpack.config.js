@@ -11,6 +11,10 @@ module.exports = {
         // Add '.ts' and '.tsx' as resolvable extensions.
         extensions: [".ts", ".tsx", ".js"]
     },
+    entry: {
+        main: './src/index.tsx',
+        embedded: './src-embedded/index.tsx',
+    },
 
     module: {
         rules: [
@@ -61,8 +65,18 @@ module.exports = {
         port: 9000
     },
 
-    plugins: [new HtmlWebpackPlugin({
-        title: "Ballerina Playground",
-        template: path.join(__dirname, "src", "index.ejs")
-    })]
+    plugins: [
+        new HtmlWebpackPlugin({
+            title: "Ballerina Playground",
+            template: path.join(__dirname, "src", "index.ejs"),
+            filename: "index.html",
+            excludeChunks: ["embedded"]
+        }),
+        new HtmlWebpackPlugin({
+            title: "Ballerina Playground Embedded",
+            template: path.join(__dirname, "src-embedded", "index.ejs"),
+            filename: "index-embedded.html",
+            excludeChunks: ["main"]
+        })
+    ]
 };
