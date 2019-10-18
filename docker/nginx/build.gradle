@@ -7,13 +7,24 @@ task copyPublicContent(type: Copy) {
     into "resources/web" 
 }
 
-task build(type: Exec) {
+def inputFiles = [
+    project.file("cloudbuild.yaml"),
+    project.file("nginx.conf"),
+    project.file("Dockerfile"),
+    project.file("resources")
+]
+
+task cloudBuild(type: Exec) {
     dependsOn copyPublicContent
-    inputs.file("cloudbuild.yaml")
-    inputs.file("nginx.conf")
-    inputs.file("Dockerfile")
-    inputs.dir("resources")
-    workingDir project.projectDir
+    inputs.files(inputFiles)
     commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", "."
 }
 
+def env = System.getenv()
+def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
+
+task build(type: Exec) {
+    dependsOn copyPublicContent
+    inputs.files(inputFiles)
+    commandLine 'docker', 'build', '-t', 'gcr.io/' + gcpProjectID +'/playground-web:' + project.version, '.'
+}

@@ -1,12 +1,28 @@
-task build(type: Exec) {
+def inputFiles = [
+    project.file("cloudbuild.yaml"),
+    project.file("package-lock.json"),
+    project.file("package.json"),
+    project.file("webpack.config.js"),
+    project.file("tsconfig.json"),
+    project.file("src")
+]
+
+task cloudBuild(type: Exec) {
+    inputs.files(inputFiles)
+    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", "."
+}
+
+task install(type: Exec) {
     inputs.file("package-lock.json")
     inputs.file("package.json")
-    inputs.file("webpack.config.js") 
-    inputs.file("tsconfig.json") 
-    inputs.dir("src")
+    outputs.dir("node_modules")     
+    commandLine "npm", "i"
+}
 
-    outputs.dir("dist")      
-
+task build(type: Exec) {
+    dependsOn install
+    inputs.files(inputFiles)
+    outputs.dir("dist")     
     commandLine "$projectDir/node_modules/.bin/webpack"
 }
 
