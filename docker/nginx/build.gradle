@@ -1,8 +1,3 @@
-
-plugins {
-    id 'com.palantir.docker' version '0.22.1'
-}
-
 dependencies {
     project(":frontend")
 }
@@ -12,17 +7,13 @@ task copyPublicContent(type: Copy) {
     into "resources/web" 
 }
 
-task build {
+task build(type: Exec) {
     dependsOn copyPublicContent
+    inputs.file("cloudbuild.yaml")
+    inputs.file("nginx.conf")
     inputs.file("Dockerfile")
-    outputs.dir("resources")
-    outputs.dir("build")
+    inputs.dir("resources")
+    workingDir project.projectDir
+    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", "."
 }
-
-docker {
-    dependsOn copyPublicContent
-    name 'hub.docker.com/ballerina.io/playground-web:' + project.version
-    files "resources", "nginx.conf"
-}
-
 
