@@ -22,7 +22,7 @@ task build {
 docker {
     dependsOn copyPublicContent
     name 'hub.docker.com/ballerina.io/playground-web:' + project.version
-    files "resources" 
+    files "resources", "nginx.conf"
 }
 
 
