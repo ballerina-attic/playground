@@ -1,0 +1,8 @@
+task deploy(type: Exec) {
+    environment("RELEASE_VERSION", "latest") // replace latest with project.version
+    commandLine './deploy-web-server.sh'
+}
+
+task undeploy(type: Exec) {
+    commandLine './undeploy-web-server.sh'
+}
