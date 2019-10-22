@@ -6,9 +6,16 @@
  */
 allprojects {
     repositories {
-        jcenter() 
+        jcenter()
+        maven {
+            url = 'http://maven.wso2.org/nexus/content/repositories/releases/'
+        }
+        maven {
+            url = 'http://maven.wso2.org/nexus/content/repositories/snapshots/'
+        }
     }
 }
 subprojects {
     version = '1.0.0-SNAPSHOT'
+    ext.setProperty("ballerinaVersion", "1.0.1")
 }

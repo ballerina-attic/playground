@@ -17,3 +17,6 @@ project(":docker:nginx").projectDir = file("docker/nginx")
 
 include ":k8s"
 project(":k8s").projectDir = file("k8s")
+
+include ":utils:compiler-plugin"
+project(":utils:compiler-plugin").projectDir = file("utils/compiler-plugin")

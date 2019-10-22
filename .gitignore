@@ -9,3 +9,5 @@ node_modules
 
 # webpack
 dist
+
+.idea
