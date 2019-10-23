@@ -32,7 +32,9 @@ task cloudBuild(type: Exec) {
     dependsOn copyApi
     dependsOn copyCompilerPlugins
     inputs.files(inputFiles)
-    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", "."
+    environment("BALLERINA_VERSION", project.ext.ballerinaVersion)
+    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", 
+        '--substitutions=_BALLERINA_VERSION=' + project.ext.ballerinaVersion, "."
 }
 
 def env = System.getenv()
