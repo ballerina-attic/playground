@@ -15,6 +15,12 @@ project(":frontend").projectDir = file("web")
 include ":docker:nginx"
 project(":docker:nginx").projectDir = file("docker/nginx")
 
+include ":docker:compiler"
+project(":docker:compiler").projectDir = file("docker/compiler")
+
+include ":api:compiler"
+project(":api:compiler").projectDir = file("api/compiler")
+
 include ":k8s"
 project(":k8s").projectDir = file("k8s")
 
