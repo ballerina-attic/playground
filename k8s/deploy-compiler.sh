@@ -5,7 +5,7 @@ if [ -z ${BPG_GCP_PROJECT_ID} ]; then
     exit 1
 fi
 
-pushd web-server > /dev/null 2>&1 
-    kubectl create -f web-server-service.yaml -n ballerina-playground-v2
-    envsubst < web-server-deployment.yaml | kubectl create -n ballerina-playground-v2 -f -
+pushd compiler > /dev/null 2>&1 
+    kubectl create -f compiler-service.yaml -n ballerina-playground-v2
+    envsubst < compiler-deployment.yaml | kubectl create -n ballerina-playground-v2 -f -
 popd > /dev/null 2>&1

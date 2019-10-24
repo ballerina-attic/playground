@@ -13,3 +13,7 @@ spec:
         backend:
           serviceName: ballerina-playground-webserver-service
           servicePort: 80
+      - path: /compiler
+        backend:
+          serviceName: ballerina-playground-compiler-service
+          servicePort: 80

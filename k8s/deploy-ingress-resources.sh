@@ -5,8 +5,6 @@ if [ -z ${BPG_GCP_PROJECT_ID} ]; then
     exit 1
 fi
 
-kubectl create ns ballerina-playground-v2
-
 pushd ingress > /dev/null 2>&1
     envsubst < ingress-resources.yaml | kubectl create -n ballerina-playground-v2 -f -
 popd > /dev/null 2>&1

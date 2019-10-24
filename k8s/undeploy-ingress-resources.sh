@@ -6,5 +6,5 @@ if [ -z ${BPG_GCP_PROJECT_ID} ]; then
 fi
 
 pushd ingress > /dev/null 2>&1
-    envsubst < ingress-resources.yaml | kubectl delete -n ballerina-playground-v2 -f -
+    kubectl delete -f ingress-resources.yaml -n ballerina-playground-v2 
 popd > /dev/null 2>&1

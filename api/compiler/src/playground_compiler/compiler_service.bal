@@ -19,7 +19,13 @@ function readFromByteChannel(io:ReadableByteChannel byteChannel) returns string|
     return content;
 }
 
+@http:ServiceConfig {
+    basePath: "/"
+}
 service compiler on new http:Listener(9090) {
+    @http:ResourceConfig {
+        path: "/versions"
+    }
     resource function versions(http:Caller caller, http:Request request) {
         system:Process|error exec = system:exec("ballerina", {}, (), "version");
         string response = "";
