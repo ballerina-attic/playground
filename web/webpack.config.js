@@ -1,5 +1,10 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const path = require('path');
+
+const APP_DIR = path.resolve(__dirname, './src');
+const MONACO_DIR = path.resolve(__dirname, './node_modules/monaco-editor');
 
 module.exports = {
     mode: "production",
@@ -47,6 +52,24 @@ module.exports = {
                   },
                 ],
             },
+            {
+                test: /\.css$/,
+                include: APP_DIR,
+                use: [{
+                  loader: 'style-loader',
+                }, {
+                  loader: 'css-loader',
+                  options: {
+                    modules: true,
+                    namedExport: true,
+                  },
+                }],
+            }, 
+            {
+                test: /\.css$/,
+                include: MONACO_DIR,
+                use: ['style-loader', 'css-loader'],  
+            }
         ]
     },
 
@@ -65,6 +88,10 @@ module.exports = {
         port: 9000
     },
 
+    optimization: {
+        minimizer: [new UglifyJsPlugin()],
+    },
+
     plugins: [
         new HtmlWebpackPlugin({
             title: "Ballerina Playground",
@@ -77,6 +104,10 @@ module.exports = {
             template: path.join(__dirname, "src-embedded", "index.ejs"),
             filename: "index-embedded.html",
             excludeChunks: ["main"]
+        }),
+        new MonacoWebpackPlugin({
+            languages: ['ballerina'],
+            features: ['bracketMatching']
         })
     ]
 };
