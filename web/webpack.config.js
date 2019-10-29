@@ -7,7 +7,7 @@ const APP_DIR = path.resolve(__dirname, './src');
 const MONACO_DIR = path.resolve(__dirname, './node_modules/monaco-editor');
 
 module.exports = {
-    mode: "production",
+    mode: "development",
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
