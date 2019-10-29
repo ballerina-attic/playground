@@ -1,0 +1,22 @@
+[2019-10-29 13:03:55,575] SEVERE {b7a.log.crash} - null 
+java.lang.NullPointerException
+	at ballerina_io.playground_runner.___init.ballerina_io_playground_runner_1_0_0__stop_(playground_runner:9)
+	at ballerina_io.playground_runner.___init.$lambda$ballerina_io_playground_runner_1_0_0__stop_(playground_runner)
+	at org.ballerinalang.jvm.scheduling.SchedulerItem.execute(Scheduler.java:408)
+	at org.ballerinalang.jvm.scheduling.Scheduler.run(Scheduler.java:202)
+	at org.ballerinalang.jvm.scheduling.Scheduler.runSafely(Scheduler.java:175)
+	at org.ballerinalang.jvm.scheduling.Scheduler.start(Scheduler.java:162)
+	at ballerina_io.playground_runner.___init.$moduleStop(playground_runner)
+	at ballerina_io.playground_runner.___init$SignalListener.run(Unknown Source)
+ 
+[2019-10-29 13:03:55,594] SEVERE {b7a.log.crash} - null 
+java.lang.NullPointerException
+	at ballerina_io.playground_runner.___init.ballerina_io_playground_runner_1_0_0__stop_(playground_runner:9)
+	at ballerina_io.playground_runner.___init.$lambda$ballerina_io_playground_runner_1_0_0__stop_(playground_runner)
+	at org.ballerinalang.jvm.scheduling.SchedulerItem.execute(Scheduler.java:408)
+	at org.ballerinalang.jvm.scheduling.Scheduler.run(Scheduler.java:202)
+	at org.ballerinalang.jvm.scheduling.Scheduler.runSafely(Scheduler.java:175)
+	at org.ballerinalang.jvm.scheduling.Scheduler.start(Scheduler.java:162)
+	at ballerina_io.playground_runner.___init.$moduleStop(playground_runner)
+	at ballerina_io.playground_runner.___init$SignalListener.run(Unknown Source)
+ 
