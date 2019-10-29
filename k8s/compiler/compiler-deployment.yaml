@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ballerina-playground-compiler-deployment
+  labels:
+    app: ballerina-playground-compiler
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ballerina-playground-compiler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: ballerina-playground-compiler
+    spec:
+      containers:
+      - name: ballerina-playground-compiler-container
+        imagePullPolicy: Always
+        image: gcr.io/${BPG_GCP_PROJECT_ID}/playground-compiler:${RELEASE_VERSION}
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 9090
+          

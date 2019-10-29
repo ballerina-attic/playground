@@ -1,0 +1,38 @@
+task deployWebServer(type: Exec) {
+    environment("RELEASE_VERSION", "latest") // replace latest with project.version
+    commandLine './deploy-web-server.sh'
+}
+
+task undeployWebServer(type: Exec) {
+    commandLine './undeploy-web-server.sh'
+}
+
+task deployCompiler(type: Exec) {
+    environment("RELEASE_VERSION", "latest") // replace latest with project.version
+    commandLine './deploy-compiler.sh'
+}
+
+task undeployCompiler(type: Exec) {
+    commandLine './undeploy-compiler.sh'
+}
+
+task deployIngressResources(type: Exec) {
+    environment("RELEASE_VERSION", "latest") // replace latest with project.version
+    commandLine './deploy-ingress-resources.sh'
+}
+
+task undeployIngressResources(type: Exec) {
+    commandLine './undeploy-ingress-resources.sh'
+}
+
+task deploy {
+    dependsOn deployWebServer
+    dependsOn deployCompiler
+    dependsOn deployIngressResources
+}
+
+task undeploy {
+    dependsOn undeployWebServer
+    dependsOn undeployCompiler
+    dependsOn undeployIngressResources
+}

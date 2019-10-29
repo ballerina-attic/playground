@@ -1,0 +1,6 @@
+plugins {
+    id 'java-library'
+}
+dependencies {
+    implementation 'org.ballerinalang:ballerina-lang:' + project.ext.ballerinaVersion
+}

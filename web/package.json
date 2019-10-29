@@ -1,0 +1,44 @@
+{
+  "name": "@ballerina/playground-web",
+  "version": "1.0.0",
+  "description": "A playground for Ballerina Language",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack --mode=production",
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaviththiranga/ballerina-playground.git"
+  },
+  "author": "ballerina.io",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/kaviththiranga/ballerina-playground/issues"
+  },
+  "homepage": "https://github.com/kaviththiranga/ballerina-playground#readme",
+  "devDependencies": {
+    "@types/react": "^16.9.5",
+    "@types/react-dom": "^16.9.1",
+    "css-loader": "^3.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "monaco-editor-webpack-plugin": "^1.7.0",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^1.0.0",
+    "ts-loader": "^6.2.0",
+    "typescript": "^3.6.4",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.41.1",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.18.1",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-monaco-editor": "^0.31.1"
+  }
+}

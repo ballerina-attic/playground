@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ballerina-playground-webserver-deployment
+  labels:
+    app: ballerina-playground-webserver
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ballerina-playground-webserver
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: ballerina-playground-webserver
+    spec:
+      containers:
+      - name: ballerina-playground-webserver-container
+        imagePullPolicy: Always
+        image: gcr.io/${BPG_GCP_PROJECT_ID}/playground-web:${RELEASE_VERSION}
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 80
+          
