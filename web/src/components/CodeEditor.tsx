@@ -26,7 +26,7 @@ const MONACO_OPTIONS: editor.IEditorConstructionOptions = {
 
 export class CodeEditor extends React.Component<{}, {}> {
     public render() {
-        return <div className="code-editor w3-content">
+        return <div className="code-editor w3-container">
             <MonacoEditor
                 language="ballerina"
                 value={"Ballerina Code goes here"}
