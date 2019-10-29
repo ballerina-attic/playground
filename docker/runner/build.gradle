@@ -9,6 +9,7 @@ dependencies {
 }
 
 task copyApi(type: Copy) {
+    dependsOn(':api:runner:build')
     from configurations.api
     into "api" 
 }

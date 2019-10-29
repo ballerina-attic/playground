@@ -13,11 +13,13 @@ dependencies {
 }
 
 task copyApi(type: Copy) {
+    dependsOn(':api:compiler:build')
     from configurations.api
     into "api" 
 }
 
 task copyCompilerPlugins(type: Copy) {
+    dependsOn(':utils:compiler-plugin:build')
     from configurations.compilerPlugins
     into "plugins" 
 }

@@ -21,6 +21,7 @@ def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
 task build(type: Exec) {
     inputs.files(inputFiles)
     outputs.dir("target")
+    outputs.cacheIf { true }
     commandLine 'ballerina', 'build', '-a'
 }
 
