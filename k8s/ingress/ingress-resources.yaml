@@ -16,3 +16,7 @@ spec:
         backend:
           serviceName: ballerina-playground-compiler-service
           servicePort: 80
+      - path: /runner/
+        backend:
+          serviceName: ballerina-playground-runner-service
+          servicePort: 80
