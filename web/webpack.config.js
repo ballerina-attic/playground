@@ -17,8 +17,12 @@ module.exports = {
         extensions: [".ts", ".tsx", ".js"]
     },
     entry: {
-        main: './src/index.tsx',
+        app: './src/index.tsx',
         embedded: './src-embedded/index.tsx',
+    },
+    output: {
+        filename: '[name].[contenthash].js',
+        path: path.resolve(__dirname, 'dist'),
     },
 
     module: {
@@ -90,6 +94,17 @@ module.exports = {
 
     optimization: {
         minimizer: [new UglifyJsPlugin()],
+        moduleIds: 'hashed',
+        runtimeChunk: 'single',
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all',
+                },
+            },
+        },
     },
 
     plugins: [
