@@ -3,6 +3,7 @@ dependencies {
 }
 
 task copyPublicContent(type: Copy) {
+    dependsOn(":frontend:build")
     from project(":frontend").buildDir
     into "resources/web" 
 }

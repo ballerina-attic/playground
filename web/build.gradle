@@ -15,14 +15,16 @@ task cloudBuild(type: Exec) {
 task install(type: Exec) {
     inputs.file("package-lock.json")
     inputs.file("package.json")
-    outputs.dir("node_modules")     
+    outputs.dir("node_modules")    
+    outputs.cacheIf({ true }) 
     commandLine "npm", "i"
 }
 
 task build(type: Exec) {
     dependsOn install
     inputs.files(inputFiles)
-    outputs.dir("dist")     
+    outputs.dir("dist")
+    outputs.cacheIf({ true }) 
     commandLine "$projectDir/node_modules/.bin/webpack"
 }
 
