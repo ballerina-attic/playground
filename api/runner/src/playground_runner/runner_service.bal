@@ -1,46 +1,26 @@
 import ballerina/http;
-import ballerina/io;
 
-type RunRequest record {
-    string sourceCode;
-    string 'version = "1.0.1";
-};
-
-service runner on new http:Listener(9090) {
-    @http:ResourceConfig {
-        methods: ["POST"],
-        body: "runReq",
-        consumes: ["application/json"],
-        produces: ["application/json"]
-    }
-    resource function run(http:Caller caller, http:Request request, RunRequest runReq) {
-        string? cacheId = getCacheId(runReq.sourceCode);
-        if (cacheId is string) {
-            boolean hasCachedOutputResult = hasCachedOutput(cacheId);
-            if (hasCachedOutputResult) {
-                string? cachedOutput = getCachedOutput(cacheId);
-                if (cachedOutput is string) {
-                    error? result = caller->respond("From Cache: " + cachedOutput );
-                    if (result is error) {
-                        io:println("Error while responding: ", result);
-                    }
-                } else {
-                    
-                }
-            } else {
-                string newResp = "This is the output";
-                setCachedOutput(cacheId, newResp);
-                error? result = caller->respond("New Cache: " + newResp );
-                if (result is error) {
-                    io:println("Error while responding: ", result);
-                }
-            }
+@http:WebSocketServiceConfig {
+    path: "/runner/run"
+}
+service runnerService on new http:Listener(9090) {
+    resource function onText(http:WebSocketCaller caller, string data, boolean finalFrame) {
+        RunnerRequest|error request = parseRequest(data);
+        if (request is error) {
+            checkpanic caller->pushText("Invalid Request. " + request.reason());
         } else {
-            error? result = caller->respond("Cannot create cache");
-            if (result is error) {
-                io:println("Error while responding: ", result);
+            if (request.cmd == RunCmd) {
+                RequestData reqData = request.data;
+                if (reqData is RunData) {
+                    checkpanic run(caller, reqData);
+                } else {
+                    checkpanic caller->pushText("Invalid Request Data for Run Cmd. ");
+                }
             }
-            
         }
     }
+}
+
+function parseRequest(string data) returns RunnerRequest|error {
+    return RunnerRequest.constructFrom(check data.fromJsonString());
 }
