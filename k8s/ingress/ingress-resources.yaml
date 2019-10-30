@@ -5,8 +5,13 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
+  tls:
+    - hosts:
+      - play.ballerina.io
+      secretName: play-tls-secret
   rules:
-  - http:
+  - host: play.ballerina.io
+    http:
       paths:
       - path: /
         backend:
