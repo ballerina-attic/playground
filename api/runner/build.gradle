@@ -20,9 +20,9 @@ def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
 
 task build(type: Exec) {
     inputs.files(inputFiles)
-    outputs.dir("target")
     outputs.cacheIf { true }
+    outputs.dir("target")
     commandLine 'ballerina', 'build', '-a'
 }
 
-artifacts.add("apiJar", project.file("target/bin/playground_compiler.jar"))
+artifacts.add("apiJar", project.file("target/bin/playground_runner.jar"))

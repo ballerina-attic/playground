@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 
 const APP_DIR = path.resolve(__dirname, './src');
@@ -17,8 +18,12 @@ module.exports = {
         extensions: [".ts", ".tsx", ".js"]
     },
     entry: {
-        main: './src/index.tsx',
+        app: './src/index.tsx',
         embedded: './src-embedded/index.tsx',
+    },
+    output: {
+        filename: '[name].[contenthash].js',
+        path: path.resolve(__dirname, 'dist'),
     },
 
     module: {
@@ -90,9 +95,21 @@ module.exports = {
 
     optimization: {
         minimizer: [new UglifyJsPlugin()],
+        moduleIds: 'hashed',
+        runtimeChunk: 'single',
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all',
+                },
+            },
+        },
     },
 
     plugins: [
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             title: "Ballerina Playground",
             template: path.join(__dirname, "src", "index.ejs"),
