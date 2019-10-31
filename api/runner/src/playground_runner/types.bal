@@ -1,17 +1,17 @@
-const RunCmd = "Run";
-const StopCmd = "Stop";
+const RunRequest = "Run";
+const StopRequest = "Stop";
 
-type Command RunCmd|StopCmd;
+type RequestType RunRequest|StopRequest;
 
 type RunData record {
     string sourceCode;
-    string 'version = "1.0.1";
+    string? 'version;
 };
 
 type RequestData RunData|();
 
 type RunnerRequest record {
-    Command cmd;
+    RequestType 'type;
     RequestData data;
 };
 
