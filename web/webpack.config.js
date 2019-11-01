@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require("webpack");
 const path = require('path');
 
@@ -134,7 +135,10 @@ module.exports = (env, argv) => {
             }),
             new webpack.DefinePlugin({
                 RUNNER_BACKEND_URL: JSON.stringify(backendUrl)
-            })
+            }),
+            new CopyWebpackPlugin([
+                {from:'samples', to:'samples'} 
+            ])
         ]
     };
 }

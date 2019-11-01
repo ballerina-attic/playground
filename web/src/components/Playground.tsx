@@ -1,5 +1,6 @@
 import * as React from "react";
 import { RunnerResponse, RunSession } from "../utils/runner-client";
+import { loadSample } from "../utils/samples";
 import { CodeEditor } from "./CodeEditor";
 import { ControlPanel } from "./ControlPanel";
 import { OutputPanel } from "./OutputPanel";
@@ -37,6 +38,13 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
 
     public componentDidMount() {
         this.createConnection();
+        setTimeout(() => {
+            loadSample("hello.bal")
+                .then(this.onCodeChange.bind(this))
+                .catch((error) => {
+                    this.printError(error.message);
+                });
+        }, 200);
     }
 
     public render() {
@@ -61,10 +69,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
                         this.onConnectionError.bind(this),
                     );
                 } catch (error) {
-                    const { responses } = this.state;
-                    this.setState({
-                        responses: [...responses, { type: "Error", data: error.message }],
-                    });
+                    this.printError(error);
                 }
             }
         }
@@ -77,6 +82,10 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
                 this.createConnection();
             }
         }
+        // clear console
+        this.setState({
+            responses: [],
+        });
         session.run(sourceCode);
     }
 
@@ -106,15 +115,10 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
     }
 
     private onConnectionError(evt: Event|Error) {
-        const { responses } = this.state;
         if (evt instanceof Error) {
-            this.setState({
-                responses: [...responses, { type: "Error", data: (evt as Error).message }],
-            });
+            this.printError((evt as Error).message);
         } else {
-            this.setState({
-                responses: [...responses, { type: "Error", data: "Unknown Error occurred. " }],
-            });
+            this.printError("Unknown Error occurred. ");
         }
     }
 
@@ -124,5 +128,12 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
 
     private onConnectionClose(evt: CloseEvent) {
         // TODO
+    }
+
+    private printError(msg: string) {
+        const { responses } = this.state;
+        this.setState({
+            responses: [...responses, { type: "Error", data: msg }],
+        });
     }
 }
