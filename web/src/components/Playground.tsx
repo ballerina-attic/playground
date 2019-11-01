@@ -5,6 +5,9 @@ import { ControlPanel } from "./ControlPanel";
 import { OutputPanel } from "./OutputPanel";
 import "./Playground.less";
 
+declare const RUNNER_BACKEND_URL: string;
+const backendUrl = RUNNER_BACKEND_URL;
+
 export interface IPlaygroundState {
     sourceCode: string;
     runInProgress: boolean;
@@ -26,7 +29,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         this.state = {
             responses: [],
             runInProgress: false,
-            session: new RunSession("ws://localhost:9090/runner/run"),
+            session: new RunSession(backendUrl),
             showDiagram: false,
             sourceCode: "",
         };
@@ -50,12 +53,19 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         const { session } = this.state;
         if (session) {
             if (!session.isOpen()) {
-                session.createConnection(
-                    this.onResponse.bind(this),
-                    this.onConnectionOpen.bind(this),
-                    this.onConnectionClose.bind(this),
-                    this.onConnectionError.bind(this),
-                );
+                try {
+                    session.createConnection(
+                        this.onResponse.bind(this),
+                        this.onConnectionOpen.bind(this),
+                        this.onConnectionClose.bind(this),
+                        this.onConnectionError.bind(this),
+                    );
+                } catch (error) {
+                    const { responses } = this.state;
+                    this.setState({
+                        responses: [...responses, { type: "Error", data: error.message }],
+                    });
+                }
             }
         }
     }
