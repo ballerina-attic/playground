@@ -1,8 +1,9 @@
 import * as React from "react";
-import MonacoEditor from 'react-monaco-editor';
+import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
 import { editor } from 'monaco-editor';
 
 import "./CodeEditor.less"
+import { PlaygroundContext } from "./Playground";
 
 const MONACO_OPTIONS: editor.IEditorConstructionOptions = {
     autoIndent: true,
@@ -23,15 +24,21 @@ const MONACO_OPTIONS: editor.IEditorConstructionOptions = {
     overviewRulerLanes: 0,
 }
 
+export interface CodeEditorProps {
+    onChange: ChangeHandler
+}
 
-export class CodeEditor extends React.Component<{}, {}> {
-    public render() {
-        return <div className="code-editor w3-container">
-            <MonacoEditor
-                language="ballerina"
-                value={"Ballerina Code goes here"}
-                options={MONACO_OPTIONS}
-            />
-        </div>
-    }
+export function CodeEditor(props: CodeEditorProps) {
+    return <PlaygroundContext.Consumer>
+            { context => {
+                return <div className="code-editor w3-container">
+                    <MonacoEditor
+                        language="ballerina"
+                        value={context.sourceCode}
+                        options={MONACO_OPTIONS}
+                        onChange={props.onChange}
+                    />
+                </div>
+            }}
+        </PlaygroundContext.Consumer>
 }
