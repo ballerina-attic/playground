@@ -4,6 +4,7 @@
   "description": "A playground for Ballerina Language",
   "main": "index.js",
   "scripts": {
+    "prebuild": "tslint --project .",
     "start": "webpack-dev-server",
     "build": "webpack --mode=production",
     "test": "echo \"Error: no test specified\""
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/kaviththiranga/ballerina-playground#readme",
   "devDependencies": {
+    "@types/classnames": "^2.2.9",
     "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
     "clean-webpack-plugin": "^3.0.0",
@@ -30,6 +32,7 @@
     "source-map-loader": "^0.2.4",
     "style-loader": "^1.0.0",
     "ts-loader": "^6.2.0",
+    "tslint": "^5.20.0",
     "typescript": "^3.6.4",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.1",
@@ -37,6 +40,7 @@
     "webpack-dev-server": "^3.8.2"
   },
   "dependencies": {
+    "classnames": "^2.2.6",
     "monaco-editor": "^0.18.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",

@@ -5,5 +5,5 @@ import { EmbeddedPlayground } from "./components/EmbeddedPlayground";
 
 ReactDOM.render(
     <EmbeddedPlayground />,
-    document.getElementById("container")
+    document.getElementById("container"),
 );

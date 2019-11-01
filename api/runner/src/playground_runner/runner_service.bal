@@ -9,7 +9,7 @@ service runnerService on new http:Listener(9090) {
         if (request is error) {
             checkpanic caller->pushText("Invalid Request. " + request.reason());
         } else {
-            if (request.cmd == RunCmd) {
+            if (request.'type == RunRequest) {
                 RequestData reqData = request.data;
                 if (reqData is RunData) {
                     checkpanic run(caller, reqData);
