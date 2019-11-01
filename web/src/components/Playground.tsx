@@ -7,19 +7,21 @@ import { RunnerResponse, RunSession } from "../utils/runner-client";
 
 export interface PlaygroundProps {};
 
-export interface IPlaygroundContext {
+export interface PlaygroundState {
     sourceCode: string;
     runInProgress: boolean;
     showDiagram: boolean;
-    responses: Array<RunnerResponse>,
-    session: RunSession,
+    responses: Array<RunnerResponse>;
+    session: RunSession;
+}
+export interface IPlaygroundContext extends PlaygroundState {
     updateContext: (newContext: Partial<IPlaygroundContext>) => void,
     onRun: () => void
 }
 
 export const PlaygroundContext = React.createContext({} as IPlaygroundContext);
 
-export class Playground extends React.Component<PlaygroundProps, IPlaygroundContext> {
+export class Playground extends React.Component<PlaygroundProps, PlaygroundState> {
 
     constructor(props: PlaygroundProps) {
         super(props);
@@ -28,13 +30,7 @@ export class Playground extends React.Component<PlaygroundProps, IPlaygroundCont
             runInProgress: false,
             showDiagram: false,
             responses: [],
-            session: new RunSession("ws://localhost:9090/runner/run"),
-            updateContext: (newContext: Partial<IPlaygroundContext>) => {
-                this.setState({
-                    ...newContext as IPlaygroundContext
-                });
-            },
-            onRun: this.onRun.bind(this)
+            session: new RunSession("ws://localhost:9090/runner/run")
         };
     }
 
@@ -91,8 +87,20 @@ export class Playground extends React.Component<PlaygroundProps, IPlaygroundCont
         });
     }
 
+    createContext(): IPlaygroundContext {
+        return {
+            ...this.state,
+            updateContext: (newContext: Partial<IPlaygroundContext>) => {
+                this.setState({
+                    ...newContext as IPlaygroundContext
+                });
+            },
+            onRun: this.onRun.bind(this)
+        }
+    }
+
     public render() {
-        return <PlaygroundContext.Provider value={this.state}>
+        return <PlaygroundContext.Provider value={this.createContext()}>
                 <div className="ballerina-playground">
                     <ControlPanel />
                     <CodeEditor onChange={this.onCodeChange.bind(this)} />
