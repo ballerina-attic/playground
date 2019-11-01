@@ -5,5 +5,5 @@ import { Playground } from "./components/Playground";
 
 ReactDOM.render(
     <Playground />,
-    document.getElementById("container")
+    document.getElementById("container"),
 );

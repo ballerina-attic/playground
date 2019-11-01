@@ -1,5 +1,5 @@
-import * as React from "react";
 import cn from "classnames";
+import * as React from "react";
 import { PlaygroundContext } from "./Playground";
 
 export function RunButton() {
@@ -7,7 +7,7 @@ export function RunButton() {
                 { ({ onRun, runInProgress }) => (<button
                         className={cn(
                             "w3-button w3-white",
-                            { "w3-disabled": runInProgress }
+                            { "w3-disabled": runInProgress },
                         )}
                         onClick={onRun}
                     >

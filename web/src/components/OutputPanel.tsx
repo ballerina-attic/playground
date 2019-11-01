@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./OutputPanel.less"
+import "./OutputPanel.less";
 import { PlaygroundContext } from "./Playground";
 
 export function OutputPanel() {
@@ -15,5 +15,5 @@ export function OutputPanel() {
                 }
             </div>
         )}
-    </PlaygroundContext.Consumer>
+    </PlaygroundContext.Consumer>;
 }

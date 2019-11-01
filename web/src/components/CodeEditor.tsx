@@ -1,36 +1,35 @@
+import { editor } from "monaco-editor";
 import * as React from "react";
-import MonacoEditor, { ChangeHandler } from 'react-monaco-editor';
-import { editor } from 'monaco-editor';
+import MonacoEditor, { ChangeHandler } from "react-monaco-editor";
 
-import "./CodeEditor.less"
+import "./CodeEditor.less";
 import { PlaygroundContext } from "./Playground";
 
 const MONACO_OPTIONS: editor.IEditorConstructionOptions = {
     autoIndent: true,
-    contextmenu: false,
-    renderIndentGuides: false,
-    matchBrackets: true,
     automaticLayout: true,
-    lineNumbersMinChars: 3,
-    scrollBeyondLastLine: false,
+    contextmenu: false,
+    hideCursorInOverviewRuler: true,
+    matchBrackets: true,
     minimap: {
         enabled: false,
     },
+    overviewRulerBorder: false,
+    overviewRulerLanes: 0,
+    renderIndentGuides: false,
+    scrollBeyondLastLine: false,
     scrollbar: {
         useShadows: true,
     },
-    hideCursorInOverviewRuler: true,
-    overviewRulerBorder: false,
-    overviewRulerLanes: 0,
-}
+};
 
 export interface CodeEditorProps {
-    onChange: ChangeHandler
+    onChange: ChangeHandler;
 }
 
 export function CodeEditor(props: CodeEditorProps) {
     return <PlaygroundContext.Consumer>
-            { context => {
+            { (context) => {
                 return <div className="code-editor w3-container">
                     <MonacoEditor
                         language="ballerina"
@@ -38,7 +37,7 @@ export function CodeEditor(props: CodeEditorProps) {
                         options={MONACO_OPTIONS}
                         onChange={props.onChange}
                     />
-                </div>
+                </div>;
             }}
-        </PlaygroundContext.Consumer>
+        </PlaygroundContext.Consumer>;
 }

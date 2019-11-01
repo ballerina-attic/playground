@@ -22,26 +22,25 @@ export interface RunnerRequest {
 
 export class RunSession {
 
-    websocket: WebSocket;
-    endpoint: string;
+    private websocket: WebSocket;
+    private endpoint: string;
 
     constructor(endpoint: string) {
-        
         if (!endpoint) {
-            throw new Error('Invalid Endpoint');
+            throw new Error("Invalid Endpoint");
         }
         this.endpoint = endpoint;
     }
 
-    init(
-            onMessage: (resp: RunnerResponse) => void = () => {}, 
-            onOpen: (evt: Event) => void = () => {},
-            onClose: (evt: CloseEvent) => void = () => {}, 
-            onError: (evt: Event|Error) => void = () => {},
+    public createConnection(
+            onMessage: (resp: RunnerResponse) => void,
+            onOpen: (evt: Event) => void,
+            onClose: (evt: CloseEvent) => void,
+            onError: (evt: Event|Error) => void,
         ) {
         this.websocket = new WebSocket(this.endpoint);
-        this.websocket.onmessage = (evt: MessageEvent) => { 
-            onMessage(JSON.parse(evt.data)); 
+        this.websocket.onmessage = (evt: MessageEvent) => {
+            onMessage(JSON.parse(evt.data));
         };
         this.websocket.onopen = onOpen;
         this.websocket.onclose = (evt: CloseEvent) => {
@@ -50,47 +49,47 @@ export class RunSession {
             } else {
                 onError(new Error("Connection Failed."));
             }
-        }
+        };
         this.websocket.onerror = onError;
     }
 
-    run(sourceCode: string) {
+    public run(sourceCode: string) {
         this.sendMessage({
-            type: "Run",
             data: {
                 sourceCode,
-                version: "1.0.1"
-            }
+                version: "1.0.1",
+            },
+            type: "Run",
         });
     }
 
-    isOpen() {
-        return this.websocket && (this.websocket.readyState == WebSocket.OPEN);
+    public isOpen() {
+        return this.websocket && (this.websocket.readyState === WebSocket.OPEN);
     }
 
-    stop() {
+    public stop() {
         this.sendMessage({
-            type: 'Stop',
+            type: "Stop",
         });
     }
 
-    sendMessage(request: RunnerRequest) {
+    public sendMessage(request: RunnerRequest) {
         const { readyState } = this.websocket;
         switch (readyState) {
             case WebSocket.CONNECTING:
                     this.websocket.onopen = () => {
                         this.websocket.send(JSON.stringify(request));
-                    }
+                    };
                     break;
-            case WebSocket.OPEN:     
+            case WebSocket.OPEN:
                     this.websocket.send(JSON.stringify(request));
                     break;
             default:
-                    throw new Error('Unable to send message: ' + JSON.stringify(request));
+                    throw new Error("Unable to send message: " + JSON.stringify(request));
         }
     }
 
-    close() {
+    public close() {
         if (this.websocket.CONNECTING || this.websocket.OPEN) {
             this.websocket.close();
         }

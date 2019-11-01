@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./ControlPanel.less"
+import "./ControlPanel.less";
 import { RunButton } from "./RunButton";
 
 export function ControlPanel() {
@@ -9,5 +9,5 @@ export function ControlPanel() {
                     <button className="w3-button w3-white">Diagram</button>
                     <button className="w3-button w3-white w3-right">Share</button>
                 </div>
-            </div>
+            </div>;
 }
