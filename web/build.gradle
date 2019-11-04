@@ -25,7 +25,7 @@ task build(type: Exec) {
     inputs.files(inputFiles)
     outputs.dir("dist")
     outputs.cacheIf({ true }) 
-    commandLine "$projectDir/node_modules/.bin/webpack"
+    commandLine "$projectDir/node_modules/.bin/webpack", "--mode=production"
 }
 
 buildDir "dist"

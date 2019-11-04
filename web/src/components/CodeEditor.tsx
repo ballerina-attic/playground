@@ -9,6 +9,8 @@ const MONACO_OPTIONS: editor.IEditorConstructionOptions = {
     autoIndent: true,
     automaticLayout: true,
     contextmenu: false,
+    fontFamily: "\"Lucida Console\", Monaco, monospace",
+    fontSize: 12,
     hideCursorInOverviewRuler: true,
     matchBrackets: true,
     minimap: {
