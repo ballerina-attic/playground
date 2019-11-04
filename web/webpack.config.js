@@ -10,7 +10,7 @@ const APP_DIR = path.resolve(__dirname, './src');
 const MONACO_DIR = path.resolve(__dirname, './node_modules/monaco-editor');
 
 module.exports = (env, argv) => {
-    const isProduction = argv.mode === 'production';
+    const isProduction = (argv.mode === 'production');
     const backendUrl = isProduction 
             ? "wss://play.ballerina.io/runner/run"
             : "ws://localhost:9090/runner/run";
