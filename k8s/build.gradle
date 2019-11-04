@@ -8,6 +8,14 @@ task undeployWebServer(type: Exec) {
     commandLine './undeploy-web-server.sh'
 }
 
+task deployNfs(type: Exec) {
+    commandLine './deploy-nfs.sh'
+}
+
+task undeployNfs(type: Exec) {
+    commandLine './undeploy-nfs.sh'
+}
+
 task deployCompiler(type: Exec) {
     dependsOn(":docker:compiler:cloudBuild")
     environment("RELEASE_VERSION", "latest") // replace latest with project.version
@@ -19,7 +27,6 @@ task deployRunner(type: Exec) {
     environment("RELEASE_VERSION", "latest") // replace latest with project.version
     commandLine './deploy-runner.sh'
 }
-
 
 task undeployCompiler(type: Exec) {
     commandLine './undeploy-compiler.sh'
