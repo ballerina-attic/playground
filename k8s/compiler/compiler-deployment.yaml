@@ -20,10 +20,17 @@ spec:
       labels:
         app: ballerina-playground-compiler
     spec:
+      volumes:
+      - name: pvc-nfs
+        persistentVolumeClaim:
+          claimName: nfs
       containers:
       - name: ballerina-playground-compiler-container
         imagePullPolicy: Always
         image: gcr.io/${BPG_GCP_PROJECT_ID}/playground-compiler:${RELEASE_VERSION}
+        volumeMounts:
+        - name: pvc-nfs
+          mountPath: "/build-cache"
         resources:
           requests:
             cpu: 100m
