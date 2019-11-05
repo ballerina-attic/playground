@@ -7,14 +7,14 @@ function getCacheId(string sourceCode) returns string? {
     return crypto:hashMd5(sourceCode.toBytes()).toBase16();
 }
 
-function hasCachedOutput(string cacheId) returns boolean {
+function hasCachedJar(string cacheId) returns boolean {
    return inMemCache.hasKey(cacheId);
 }
 
-function getCachedOutput(string cacheId) returns string? {
+function getCachedJar(string cacheId) returns string? {
     return <string?> inMemCache.get(cacheId);
 }
 
-function setCachedOutput(string cacheId, string output) {
+function setCachedJar(string cacheId, string output) {
    inMemCache.put(cacheId, output);
 }

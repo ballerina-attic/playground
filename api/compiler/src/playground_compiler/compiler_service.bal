@@ -1,13 +1,26 @@
 import ballerina/http;
-import ballerina/io;
 
-service compiler on new http:Listener(9090) {
-    resource function 'version(http:Caller caller, http:Request request) {
-        string versionInfo = checkpanic execBallerinaCmd("version");
-        error? result = caller->respond(versionInfo);
-        if (result is error) {
-            io:println("Error while responding: ", result);
-            
+@http:WebSocketServiceConfig {
+    path: "/compiler"
+}
+service compilerService on new http:Listener(9090) {
+    resource function onText(http:WebSocketCaller caller, string data, boolean finalFrame) {
+        CompilerRequest|error request = parseRequest(data);
+        if (request is error) {
+            checkpanic caller->pushText("Invalid Request. " + request.reason());
+        } else {
+            if (request.'type == CompileRequest) {
+                RequestData reqData = request.data;
+                if (reqData is CompileData) {
+                    checkpanic compile(caller, reqData);
+                } else {
+                    checkpanic caller->pushText("Invalid Request Data for Compile Cmd. ");
+                }
+            }
         }
     }
+}
+
+function parseRequest(string data) returns CompilerRequest|error {
+    return CompilerRequest.constructFrom(check data.fromJsonString());
 }

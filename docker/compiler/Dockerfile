@@ -18,4 +18,4 @@ USER ballerina
 
 EXPOSE 9090
 
-CMD ["java", "-jar", "playground_compiler.jar"]
+CMD ["java", "-jar", "playground_compiler.jar", "--b7a.log.level=ALL"]
