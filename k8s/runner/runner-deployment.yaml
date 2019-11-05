@@ -24,6 +24,10 @@ spec:
       - name: ballerina-playground-runner-container
         imagePullPolicy: Always
         image: gcr.io/${BPG_GCP_PROJECT_ID}/playground-runner:${RELEASE_VERSION}
+        env:
+        -
+          name: COMPILER_HOST
+          value: ws://ballerina-playground-compiler-service.${BPG_NAMESPACE}.svc.cluster.local/compiler
         resources:
           requests:
             cpu: 100m

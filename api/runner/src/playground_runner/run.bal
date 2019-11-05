@@ -1,25 +1,65 @@
 import ballerina/http;
+import ballerina/system;
+import ballerina/io;
+import ballerina/log;
+
+final string ASSOCIATED_CONNECTION = "ASSOCIATED_CONNECTION";
+
+function invokeCompiler(http:WebSocketCaller frontEndCaller, string cacheId, RunData data) returns error? {
+    string compilerHost = system:getEnv("COMPILER_HOST");
+    log:printDebug("compiler-proxy:selectedHost: " + compilerHost);
+    service Callback = @http:WebSocketServiceConfig {} service {
+        resource function onText(http:WebSocketClient conn, string text, boolean finalFrame) {
+            log:printDebug("compiler-proxy:OnText: " + text);
+            var frontEndCaller = <http:WebSocketCaller> conn.getAttribute(ASSOCIATED_CONNECTION);
+            error? pushText = frontEndCaller->pushText(text);
+            if (pushText is error) {
+                log:printError("Error while replying to front end.");
+            }
+        }
+        resource function onError(http:WebSocketClient conn, error err) {
+            log:printError("compiler-proxy:OnError: " + err.reason());
+            var frontEndCaller = <http:WebSocketCaller> conn.getAttribute(ASSOCIATED_CONNECTION);
+            error? pushText = frontEndCaller->pushText({
+                'type: "Error",
+                data: "Error while compiling. " + err.reason()
+            });
+            if (pushText is error) {
+                io:println("Error while replying to front end.");
+            }
+        }
+    };
+    http:WebSocketClient compilerClient = new(compilerHost,
+                            config = {callbackService: Callback});
+    compilerClient.setAttribute(ASSOCIATED_CONNECTION, frontEndCaller);
+    json compileRequest = {
+        'type: "Compile",
+        'data: check json.constructFrom(data)
+    };
+    log:printDebug("compiler-proxy:compile: " + compileRequest.toJsonString());
+    check compilerClient->pushText(compileRequest);
+}
 
 function run(http:WebSocketCaller caller, RunData data) returns error? {
+    log:printDebug("runner:onRun: " + data.toString());
     string? cacheId = getCacheId(data.sourceCode);
     if (cacheId is string) {
         boolean hasCachedOutputResult = hasCachedOutput(cacheId);
-        if (hasCachedOutputResult) {
-            string? cachedOutput = getCachedOutput(cacheId);
-            if (cachedOutput is string) {
-                RunnerResponse response = createDataResponse("From Cache: " + cachedOutput);
-                check caller->pushText(check createStringResponse(response));
-            } else {
-
-            }
-        } else {
-            string newResp = "This is the output";
-            setCachedOutput(cacheId, newResp);
-            RunnerResponse response = createDataResponse("New Cache: " + newResp);
+        string? cachedOutput = getCachedOutput(cacheId);
+        if (hasCachedOutputResult && cachedOutput is string) {
+            log:printDebug("runner:hasCachedOutput: " + data.toString());
+            RunnerResponse response = createDataResponse("From Cache: " + cachedOutput);
             check caller->pushText(check createStringResponse(response));
+        } else {
+            log:printDebug("runner:noCachedOutput: " + data.toString());
+            error? compilerResult = invokeCompiler(caller, cacheId, data);
+            if (compilerResult is error) {
+                log:printError("Error with compiler. " + compilerResult.reason());
+            }
         }
     } else {
-        RunnerResponse response = createErrorResponse("Cannot access cache");
+        log:printError("Cannot get cache ID");
+        RunnerResponse response = createErrorResponse("Cannot get cache ID");
         check caller->pushText(check createStringResponse(response));
     }
 }

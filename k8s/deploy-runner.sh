@@ -6,6 +6,7 @@ if [ -z ${BPG_GCP_PROJECT_ID} ]; then
 fi
 
 pushd runner > /dev/null 2>&1 
-    kubectl create -f runner-service.yaml -n ballerina-playground-v2
-    envsubst < runner-deployment.yaml | kubectl create -n ballerina-playground-v2 -f -
+    export BPG_NAMESPACE=ballerina-playground-v2
+    kubectl create -f runner-service.yaml -n $BPG_NAMESPACE
+    envsubst < runner-deployment.yaml | kubectl create -n $BPG_NAMESPACE -f -
 popd > /dev/null 2>&1
