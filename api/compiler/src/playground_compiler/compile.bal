@@ -1,4 +1,3 @@
-import ballerina/http;
 import ballerina/file;
 import ballerina/filepath;
 import ballerina/io;
@@ -27,35 +26,43 @@ function createSourceFile(string cacheId, string sourceCode) returns string|erro
     }
 }
 
-function compile(http:WebSocketCaller caller, CompileData data) returns error? {
+function compile(CompileData data) returns CompilerResponse|error {
     string? cacheId = getCacheId(data.sourceCode);
     if (cacheId is string) {
         boolean hasCachedJarResult = hasCachedJar(cacheId);
         if (hasCachedJarResult) {
             string? cachedJar = getCachedJar(cacheId);
             if (cachedJar is string) {
-                CompilerResponse response = createDataResponse("From Jar Cache" + cachedJar);
-                check caller->pushText(check createStringResponse(response));
+                return createDataResponse(cachedJar);
             } else {
-
+                return createErrorResponse("Invalid cached jar path returned from cache.");
             }
         } else {
             string sourceFile = check createSourceFile(cacheId, data.sourceCode);
-            setCachedJar(cacheId, sourceFile);
-            CompilerResponse response = createDataResponse("New Jar Cache: " + sourceFile);
-            // compile and set jar
-            check caller->pushText(check createStringResponse(response));
+            string buildDir = check filepath:parent(sourceFile);
+            string|error execStatus = execBallerinaCmd(buildDir, "build", "app.bal");
+            if (execStatus is error) {
+                 return createErrorResponse(execStatus.reason());
+            } else {
+                string jarPath = check filepath:build(buildDir, "app.jar");
+                setCachedJar(cacheId, execStatus);
+                return createDataResponse(execStatus);
+            }
         }
     } else {
-        CompilerResponse response = createErrorResponse("Cannot access cache");
-        check caller->pushText(check createStringResponse(response));
+        return createErrorResponse("Cannot access cache");
     }
 }
 
-function createStringResponse(CompilerResponse reponse) returns json|error {
+function createStringResponse(CompilerResponse reponse) returns string|error {
     json jsonResp = check json.constructFrom(reponse);
     return jsonResp.toJsonString();
 }
+
+function createControlResponse(string data) returns CompilerResponse {
+    return <CompilerResponse> { "type": ControlResponse, "data": data };
+}
+
 
 function createDataResponse(string data) returns CompilerResponse {
     return <CompilerResponse> { "type": DataResponse, "data": data };
