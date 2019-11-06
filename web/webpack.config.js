@@ -22,7 +22,7 @@ module.exports = (env, argv) => {
     
         resolve: {
             // Add '.ts' and '.tsx' as resolvable extensions.
-            extensions: [".ts", ".tsx", ".js"]
+            extensions: [".ts", ".tsx", ".js", ".json"]
         },
         entry: {
             app: './src/index.tsx',

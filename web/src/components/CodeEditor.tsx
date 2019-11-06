@@ -1,16 +1,29 @@
-import { editor } from "monaco-editor";
+import * as monaco from "monaco-editor";
 import * as React from "react";
 import MonacoEditor, { ChangeHandler } from "react-monaco-editor";
+import * as grammar from "./ballerina.monarch.json";
+
+const BALLERINA_LANG = "ballerina";
+
+monaco.languages.register({ id: BALLERINA_LANG });
+
+interface Tokenizer {
+    [name: string]: monaco.languages.IMonarchLanguageRule[];
+}
+
+monaco.languages.setMonarchTokensProvider(BALLERINA_LANG, {
+    tokenizer: grammar as Tokenizer,
+});
 
 import "./CodeEditor.less";
 import { PlaygroundContext } from "./Playground";
 
-const MONACO_OPTIONS: editor.IEditorConstructionOptions = {
+const MONACO_OPTIONS: monaco.editor.IEditorConstructionOptions = {
     autoIndent: true,
     automaticLayout: true,
     contextmenu: false,
     fontFamily: "\"Lucida Console\", Monaco, monospace",
-    fontSize: 12,
+    fontSize: 13,
     hideCursorInOverviewRuler: true,
     matchBrackets: true,
     minimap: {
@@ -34,7 +47,7 @@ export function CodeEditor(props: CodeEditorProps) {
             { (context) => {
                 return <div className="code-editor w3-container">
                     <MonacoEditor
-                        language="ballerina"
+                        language={BALLERINA_LANG}
                         value={context.sourceCode}
                         options={MONACO_OPTIONS}
                         onChange={props.onChange}
