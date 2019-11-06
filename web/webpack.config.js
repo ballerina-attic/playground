@@ -1,6 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require("webpack");
@@ -22,7 +22,7 @@ module.exports = (env, argv) => {
     
         resolve: {
             // Add '.ts' and '.tsx' as resolvable extensions.
-            extensions: [".ts", ".tsx", ".js", ".json"]
+            extensions: [".ts", ".tsx", ".js"]
         },
         entry: {
             app: './src/index.tsx',
@@ -101,7 +101,7 @@ module.exports = (env, argv) => {
         },
     
         optimization: {
-            minimizer: [new UglifyJsPlugin()],
+            minimizer: [new TerserPlugin()],
             moduleIds: 'hashed',
             runtimeChunk: 'single',
             splitChunks: {
