@@ -7,7 +7,7 @@ export type StopRequest = "Stop";
 
 export interface RunData {
     sourceCode: string;
-    version?: string;
+    balVersion: string;
 }
 
 export interface RunnerResponse {
@@ -56,8 +56,8 @@ export class RunSession {
     public run(sourceCode: string) {
         this.sendMessage({
             data: {
+                balVersion: "1.0.1",
                 sourceCode,
-                version: "1.0.1",
             },
             type: "Run",
         });

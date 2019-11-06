@@ -42,7 +42,7 @@ function invokeCompiler(http:WebSocketCaller frontEndCaller, string cacheId, Run
 
 function run(http:WebSocketCaller caller, RunData data) returns error? {
     log:printDebug("runner:onRun: " + data.toString());
-    string? cacheId = getCacheId(data.sourceCode);
+    string? cacheId = getCacheId(data.sourceCode, data.balVersion);
     if (cacheId is string) {
         boolean hasCachedOutputResult = hasCachedOutput(cacheId);
         string? cachedOutput = getCachedOutput(cacheId);

@@ -5,7 +5,7 @@ type RequestType RunRequest|StopRequest;
 
 type RunData record {
     string sourceCode;
-    string? 'version;
+    string balVersion;
 };
 
 type RequestData RunData|();

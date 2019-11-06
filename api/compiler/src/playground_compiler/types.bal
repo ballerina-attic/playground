@@ -5,7 +5,7 @@ type RequestType CompileRequest|StopRequest;
 
 type CompileData record {
     string sourceCode;
-    string? 'version;
+    string balVersion;
 };
 
 type RequestData CompileData|();
