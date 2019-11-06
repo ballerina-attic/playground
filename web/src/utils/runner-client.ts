@@ -44,7 +44,7 @@ export class RunSession {
         };
         this.websocket.onopen = onOpen;
         this.websocket.onclose = (evt: CloseEvent) => {
-            if (evt.wasClean) {
+            if (evt.wasClean || evt.code === 1006) {
                 onClose(evt);
             } else {
                 onError(new Error("Connection Failed."));
