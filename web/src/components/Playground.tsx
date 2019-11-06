@@ -15,6 +15,7 @@ export interface IPlaygroundState {
     showDiagram: boolean;
     responses: RunnerResponse[];
     session: RunSession;
+    waitingOnRemoteServer: boolean;
 }
 export interface IPlaygroundContext extends IPlaygroundState {
     updateContext: (newContext: Partial<IPlaygroundContext>) => void;
@@ -33,6 +34,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
             session: new RunSession(backendUrl),
             showDiagram: false,
             sourceCode: "",
+            waitingOnRemoteServer: false,
         };
     }
 
@@ -76,16 +78,17 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
     }
 
     private onRun() {
+        // clear console and set waiting on remote server.
+        this.setState({
+            responses: [],
+            waitingOnRemoteServer: true,
+        });
         const { session, sourceCode } = this.state;
         if (session) {
             if (!session.isOpen()) {
                 this.createConnection();
             }
         }
-        // clear console
-        this.setState({
-            responses: [],
-        });
         session.run(sourceCode);
     }
 
@@ -93,6 +96,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         const { responses } = this.state;
         this.setState({
             responses: [...responses, resp],
+            waitingOnRemoteServer: false,
         });
     }
 

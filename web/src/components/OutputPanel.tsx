@@ -4,8 +4,9 @@ import { PlaygroundContext } from "./Playground";
 
 export function OutputPanel() {
     return <PlaygroundContext.Consumer>
-        {({ responses }) => (
+        {({ responses, waitingOnRemoteServer }) => (
             <div className="output-panel w3-container">
+                {waitingOnRemoteServer && <div className="control">Waiting on remote server</div>}
                 {
                     responses.map(({ type, data }) => (
                         <div className={type.toLowerCase()}>

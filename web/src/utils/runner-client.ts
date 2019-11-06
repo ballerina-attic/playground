@@ -7,7 +7,7 @@ export type StopRequest = "Stop";
 
 export interface RunData {
     sourceCode: string;
-    version?: string;
+    balVersion: string;
 }
 
 export interface RunnerResponse {
@@ -44,7 +44,7 @@ export class RunSession {
         };
         this.websocket.onopen = onOpen;
         this.websocket.onclose = (evt: CloseEvent) => {
-            if (evt.wasClean) {
+            if (evt.wasClean || evt.code === 1006) {
                 onClose(evt);
             } else {
                 onError(new Error("Connection Failed."));
@@ -56,8 +56,8 @@ export class RunSession {
     public run(sourceCode: string) {
         this.sendMessage({
             data: {
+                balVersion: "1.0.1",
                 sourceCode,
-                version: "1.0.1",
             },
             type: "Run",
         });

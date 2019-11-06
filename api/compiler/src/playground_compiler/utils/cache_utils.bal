@@ -3,8 +3,9 @@ import ballerina/cache;
 
 cache:Cache inMemCache = new();
 
-function getCacheId(string sourceCode) returns string? {
-    return crypto:hashMd5(sourceCode.toBytes()).toBase16();
+function getCacheId(string sourceCode, string balVersion) returns string? {
+    string cacheSource = sourceCode + balVersion;
+    return crypto:hashMd5(cacheSource.toBytes()).toBase16();
 }
 
 function hasCachedJar(string cacheId) returns boolean {

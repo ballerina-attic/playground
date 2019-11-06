@@ -27,7 +27,7 @@ function createSourceFile(string cacheId, string sourceCode) returns string|erro
 }
 
 function compile(CompileData data) returns CompilerResponse|error {
-    string? cacheId = getCacheId(data.sourceCode);
+    string? cacheId = getCacheId(data.sourceCode, data.balVersion);
     if (cacheId is string) {
         boolean hasCachedJarResult = hasCachedJar(cacheId);
         if (hasCachedJarResult) {
