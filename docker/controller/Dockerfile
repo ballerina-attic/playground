@@ -9,10 +9,10 @@ RUN mkdir -p /api && \
 COPY api/*.jar /api
 
 RUN chown -R ballerina:troupe /api && \
-    chmod +x /api/playground_runner.jar
+    chmod +x /api/playground_controller.jar
 
 USER ballerina
 
 EXPOSE 9090
 
-CMD ["java", "-jar", "/api/playground_runner.jar", "--b7a.log.level=ALL"]
+CMD ["java", "-jar", "/api/playground_controller.jar", "--b7a.log.level=ALL"]

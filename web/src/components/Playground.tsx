@@ -1,20 +1,20 @@
 import * as React from "react";
-import { RunnerResponse, RunSession } from "../utils/runner-client";
+import { PlaygroundResponse, PlaySession } from "../utils/client";
 import { loadSample } from "../utils/samples";
 import { CodeEditor } from "./CodeEditor";
 import { ControlPanel } from "./ControlPanel";
 import { OutputPanel } from "./OutputPanel";
 import "./Playground.less";
 
-declare const RUNNER_BACKEND_URL: string;
-const backendUrl = RUNNER_BACKEND_URL;
+declare const CONTROLLER_BACKEND_URL: string;
+const backendUrl = CONTROLLER_BACKEND_URL;
 
 export interface IPlaygroundState {
     sourceCode: string;
     runInProgress: boolean;
     showDiagram: boolean;
-    responses: RunnerResponse[];
-    session: RunSession;
+    responses: PlaygroundResponse[];
+    session: PlaySession;
     waitingOnRemoteServer: boolean;
 }
 export interface IPlaygroundContext extends IPlaygroundState {
@@ -31,7 +31,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         this.state = {
             responses: [],
             runInProgress: false,
-            session: new RunSession(backendUrl),
+            session: new PlaySession(backendUrl),
             showDiagram: false,
             sourceCode: "",
             waitingOnRemoteServer: false,
@@ -92,7 +92,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         session.run(sourceCode);
     }
 
-    private onResponse(resp: RunnerResponse) {
+    private onResponse(resp: PlaygroundResponse) {
         const { responses } = this.state;
         this.setState({
             responses: [...responses, resp],

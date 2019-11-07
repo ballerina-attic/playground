@@ -21,11 +21,11 @@ project(":docker:compiler").projectDir = file("docker/compiler")
 include ":api:compiler"
 project(":api:compiler").projectDir = file("api/compiler")
 
-include ":docker:runner"
-project(":docker:runner").projectDir = file("docker/runner")
+include ":docker:controller"
+project(":docker:controller").projectDir = file("docker/controller")
 
-include ":api:runner"
-project(":api:runner").projectDir = file("api/runner")
+include ":api:controller"
+project(":api:controller").projectDir = file("api/controller")
 
 include ":k8s"
 project(":k8s").projectDir = file("k8s")
