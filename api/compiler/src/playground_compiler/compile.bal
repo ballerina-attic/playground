@@ -29,13 +29,13 @@ function createSourceFile(string cacheId, string sourceCode) returns string|erro
 function compile(CompileData data) returns CompilerResponse|error {
     string? cacheId = getCacheId(data.sourceCode, data.balVersion);
     if (cacheId is string) {
-        boolean hasCachedJarResult = hasCachedJar(cacheId);
-        if (hasCachedJarResult) {
-            string? cachedJar = getCachedJar(cacheId);
-            if (cachedJar is string) {
-                return createDataResponse(cachedJar);
+        boolean hasCachedOutputResult = hasCachedOutput(cacheId);
+        if (hasCachedOutputResult) {
+            string? cachedOutput = getCachedOutput(cacheId);
+            if (cachedOutput is string) {
+                return createDataResponse(cachedOutput);
             } else {
-                return createErrorResponse("Invalid cached jar path returned from cache.");
+                return createErrorResponse("Invalid cached output returned from cache.");
             }
         } else {
             string sourceFile = check createSourceFile(cacheId, data.sourceCode);
@@ -45,7 +45,7 @@ function compile(CompileData data) returns CompilerResponse|error {
                  return createErrorResponse(execStatus.reason());
             } else {
                 string jarPath = check filepath:build(buildDir, "app.jar");
-                setCachedJar(cacheId, execStatus);
+                setCachedOutput(cacheId, execStatus);
                 return createDataResponse(execStatus);
             }
         }
