@@ -27,6 +27,12 @@ project(":docker:controller").projectDir = file("docker/controller")
 include ":api:controller"
 project(":api:controller").projectDir = file("api/controller")
 
+include ":docker:executor"
+project(":docker:executor").projectDir = file("docker/executor")
+
+include ":api:executor"
+project(":api:executor").projectDir = file("api/executor")
+
 include ":k8s"
 project(":k8s").projectDir = file("k8s")
 

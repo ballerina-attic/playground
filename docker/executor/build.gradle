@@ -1,0 +1,68 @@
+configurations {
+    api {
+        transitive = false
+    }
+}
+
+dependencies {
+    api project(path: ":api:executor", configuration: "apiJar")
+}
+
+task cleanResources(type: Delete) {
+    delete "api"
+}
+
+task copyApi(type: Copy) {
+    dependsOn cleanResources
+    dependsOn(':api:executor:build')
+    from configurations.api
+    into "api" 
+}
+
+def inputFiles = [
+    project.file("cloudbuild.yaml"),
+    project.file("Dockerfile")
+]
+
+task cloudBuild(type: Exec) {
+    dependsOn copyApi
+    inputs.files(inputFiles)
+    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", "."
+}
+
+def env = System.getenv()
+def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
+def imageTag = 'gcr.io/' + gcpProjectID +'/playground-executor:' + project.version
+
+task build(type: Exec) {
+    dependsOn copyApi
+    inputs.files(inputFiles)
+    commandLine 'docker', 'build', '-t', imageTag, '.'
+}
+
+def containerIdFile = new File(projectDir, "containerId.txt");
+if (!containerIdFile.exists()) {
+    containerIdFile.write("");
+}
+
+task start(type: Exec) {
+    dependsOn build
+    commandLine "docker", "run", "-d", "-p", "9092:9090",
+        "-v", project(":docker:compiler").projectDir.toString() + "/build-cache:/build-cache", imageTag
+    standardOutput = new ByteArrayOutputStream()
+	doLast {
+        containerIdFile.text = standardOutput.toString()
+        println standardOutput.toString()
+	}
+}
+
+task logs(type: Exec) {
+    commandLine "docker", "logs", "-f", containerIdFile.text.trim()
+}
+
+task stop(type: Exec) {
+    commandLine "docker", "kill", containerIdFile.text.trim()
+    doLast {
+        containerIdFile.text = ""
+	}
+}

@@ -25,3 +25,7 @@ spec:
         backend:
           serviceName: ballerina-playground-controller-service
           servicePort: 80
+      - path: /executor
+        backend:
+          serviceName: ballerina-playground-executor-service
+          servicePort: 80

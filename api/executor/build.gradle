@@ -1,0 +1,28 @@
+configurations {
+    apiJar {
+        transitive = false
+    }
+}
+
+def inputFiles = [
+    project.file("Ballerina.toml"),
+    project.file("Ballerina.lock"),
+    project.file("src")
+]
+
+task cloudBuild(type: Exec) {
+    inputs.files(inputFiles)
+    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", "."
+}
+
+def env = System.getenv()
+def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
+
+task build(type: Exec) {
+    inputs.files(inputFiles)
+    outputs.dir("target")
+    outputs.cacheIf { true }
+    commandLine 'ballerina', 'build', '-a'
+}
+
+artifacts.add("apiJar", project.file("target/bin/playground_executor.jar"))
