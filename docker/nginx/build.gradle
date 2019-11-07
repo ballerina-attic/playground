@@ -2,7 +2,12 @@ dependencies {
     project(":frontend")
 }
 
+task cleanResources(type: Delete) {
+    delete "resources/web"
+}
+
 task copyPublicContent(type: Copy) {
+    dependsOn cleanResources
     dependsOn(":frontend:build")
     from project(":frontend").buildDir
     into "resources/web" 

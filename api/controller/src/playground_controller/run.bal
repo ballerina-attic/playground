@@ -41,17 +41,17 @@ function invokeCompiler(http:WebSocketCaller frontEndCaller, string cacheId, Run
 }
 
 function run(http:WebSocketCaller caller, RunData data) returns error? {
-    log:printDebug("runner:onRun: " + data.toString());
+    log:printDebug("controller:onRun: " + data.toString());
     string? cacheId = getCacheId(data.sourceCode, data.balVersion);
     if (cacheId is string) {
         boolean hasCachedOutputResult = hasCachedOutput(cacheId);
         string? cachedOutput = getCachedOutput(cacheId);
         if (hasCachedOutputResult && cachedOutput is string) {
-            log:printDebug("runner:hasCachedOutput: " + data.toString());
-            RunnerResponse response = createDataResponse("From Cache: " + cachedOutput);
+            log:printDebug("controller:hasCachedOutput: " + data.toString());
+            PlaygroundResponse response = createDataResponse("From Cache: " + cachedOutput);
             check caller->pushText(check createStringResponse(response));
         } else {
-            log:printDebug("runner:noCachedOutput: " + data.toString());
+            log:printDebug("controller:noCachedOutput: " + data.toString());
             error? compilerResult = invokeCompiler(caller, cacheId, data);
             if (compilerResult is error) {
                 log:printError("Error with compiler. " + compilerResult.reason());
@@ -59,20 +59,20 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
         }
     } else {
         log:printError("Cannot get cache ID");
-        RunnerResponse response = createErrorResponse("Cannot get cache ID");
+        PlaygroundResponse response = createErrorResponse("Cannot get cache ID");
         check caller->pushText(check createStringResponse(response));
     }
 }
 
-function createStringResponse(RunnerResponse reponse) returns json|error {
+function createStringResponse(PlaygroundResponse reponse) returns json|error {
     json jsonResp = check json.constructFrom(reponse);
     return jsonResp.toJsonString();
 }
 
-function createDataResponse(string data) returns RunnerResponse {
-    return <RunnerResponse> { "type": DataResponse, "data": data };
+function createDataResponse(string data) returns PlaygroundResponse {
+    return <PlaygroundResponse> { "type": DataResponse, "data": data };
 }
 
-function createErrorResponse(string data) returns RunnerResponse {
-    return <RunnerResponse> { "type": ErrorResponse, "data": data };
+function createErrorResponse(string data) returns PlaygroundResponse {
+    return <PlaygroundResponse> { "type": ErrorResponse, "data": data };
 }

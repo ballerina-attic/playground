@@ -10,17 +10,17 @@ export interface RunData {
     balVersion: string;
 }
 
-export interface RunnerResponse {
+export interface PlaygroundResponse {
     type: ErrorResponse|DataResponse|ControlResponse;
     data?: string;
 }
 
-export interface RunnerRequest {
+export interface PlaygroundRequest {
     type: RunRequest|StopRequest;
     data?: RunData;
 }
 
-export class RunSession {
+export class PlaySession {
 
     private websocket: WebSocket;
     private endpoint: string;
@@ -33,7 +33,7 @@ export class RunSession {
     }
 
     public createConnection(
-            onMessage: (resp: RunnerResponse) => void,
+            onMessage: (resp: PlaygroundResponse) => void,
             onOpen: (evt: Event) => void,
             onClose: (evt: CloseEvent) => void,
             onError: (evt: Event|Error) => void,
@@ -73,7 +73,7 @@ export class RunSession {
         });
     }
 
-    public sendMessage(request: RunnerRequest) {
+    public sendMessage(request: PlaygroundRequest) {
         const { readyState } = this.websocket;
         switch (readyState) {
             case WebSocket.CONNECTING:

@@ -10,7 +10,7 @@ type RunData record {
 
 type RequestData RunData|();
 
-type RunnerRequest record {
+type PlaygroundRequest record {
     RequestType 'type;
     RequestData data;
 };
@@ -21,7 +21,7 @@ const ControlResponse = "Control";
 
 type ResponseType ErrorResponse|DataResponse|ControlResponse;
 
-type RunnerResponse record {
+type PlaygroundResponse record {
     ResponseType 'type;
     string? data;
 };

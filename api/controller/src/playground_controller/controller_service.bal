@@ -2,11 +2,11 @@ import ballerina/http;
 import ballerina/log;
 
 @http:WebSocketServiceConfig {
-    path: "/runner"
+    path: "/controller"
 }
-service runnerService on new http:Listener(9090) {
+service controllerService on new http:Listener(9090) {
     resource function onText(http:WebSocketCaller caller, string data, boolean finalFrame) {
-        RunnerRequest|error request = parseRequest(data);
+        PlaygroundRequest|error request = parseRequest(data);
         if (request is error) {
             respondAndHandleErrors(caller, "Invalid Request. " + request.reason());
         } else {
@@ -32,6 +32,6 @@ function respondAndHandleErrors(http:WebSocketCaller caller, string response) {
     }
 }
 
-function parseRequest(string data) returns RunnerRequest|error {
-    return RunnerRequest.constructFrom(check data.fromJsonString());
+function parseRequest(string data) returns PlaygroundRequest|error {
+    return PlaygroundRequest.constructFrom(check data.fromJsonString());
 }

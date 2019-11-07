@@ -25,4 +25,4 @@ task build(type: Exec) {
     commandLine 'ballerina', 'build', '-a'
 }
 
-artifacts.add("apiJar", project.file("target/bin/playground_runner.jar"))
+artifacts.add("apiJar", project.file("target/bin/playground_controller.jar"))
