@@ -28,6 +28,9 @@ spec:
         -
           name: COMPILER_HOST
           value: ws://ballerina-playground-compiler-service.${BPG_NAMESPACE}.svc.cluster.local/compiler
+        -
+          name: EXECUTOR_HOST
+          value: ws://ballerina-playground-executor-service.${BPG_NAMESPACE}.svc.cluster.local/compiler
         resources:
           requests:
             cpu: 100m

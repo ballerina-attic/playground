@@ -5,7 +5,7 @@ configurations {
 }
 
 dependencies {
-    api project(path: ":api:controller", configuration: "apiJar")
+    api project(path: ":api:executor", configuration: "apiJar")
 }
 
 task cleanResources(type: Delete) {
@@ -14,7 +14,7 @@ task cleanResources(type: Delete) {
 
 task copyApi(type: Copy) {
     dependsOn cleanResources
-    dependsOn(':api:controller:build')
+    dependsOn(':api:executor:build')
     from configurations.api
     into "api" 
 }
@@ -32,7 +32,7 @@ task cloudBuild(type: Exec) {
 
 def env = System.getenv()
 def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
-def imageTag = 'gcr.io/' + gcpProjectID +'/playground-controller:' + project.version
+def imageTag = 'gcr.io/' + gcpProjectID +'/playground-executor:' + project.version
 
 task build(type: Exec) {
     dependsOn copyApi
@@ -47,9 +47,8 @@ if (!containerIdFile.exists()) {
 
 task start(type: Exec) {
     dependsOn build
-    commandLine "docker", "run", "--env", "COMPILER_HOST=ws://docker.for.mac.host.internal:9091/compiler", 
-        "--env", "EXECUTOR_HOST=ws://docker.for.mac.host.internal:9092/executor", 
-        "-d", "-p", "9090:9090", imageTag
+    commandLine "docker", "run", "-d", "-p", "9092:9090",
+        "-v", project(":docker:compiler").projectDir.toString() + "/build-cache:/build-cache", imageTag
     standardOutput = new ByteArrayOutputStream()
 	doLast {
         containerIdFile.text = standardOutput.toString()

@@ -1,16 +1,16 @@
-const RunRequest = "Run";
+const ExecuteRequest = "Execute";
 const StopRequest = "Stop";
 
-type RequestType RunRequest|StopRequest;
+type RequestType ExecuteRequest|StopRequest;
 
-type RunData record {
+type ExecuteData record {
     string sourceCode;
     string balVersion;
 };
 
-type RequestData RunData|();
+type RequestData ExecuteData|string|();
 
-type PlaygroundRequest record {
+type ExecutorRequest record {
     RequestType 'type;
     RequestData data;
 };
@@ -21,9 +21,7 @@ const ControlResponse = "Control";
 
 type ResponseType ErrorResponse|DataResponse|ControlResponse;
 
-type PlaygroundResponse record {
+type ExecutorResponse record {
     ResponseType 'type;
-    string? data;
+    RequestData data;
 };
-
-type CompilerCallback function (boolean isSuccess) returns ();
