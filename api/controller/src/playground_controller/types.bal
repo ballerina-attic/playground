@@ -25,3 +25,5 @@ type PlaygroundResponse record {
     ResponseType 'type;
     string? data;
 };
+
+type CompilerCallback function (boolean isSuccess) returns ();

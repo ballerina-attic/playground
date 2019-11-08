@@ -19,8 +19,12 @@ service compilerService on new http:Listener(9090) {
                         respond(caller, createErrorResponse("Error while compiling. " + cmpResp.reason()));
                     } else {
                         respond(caller, cmpResp);
+                        if (cmpResp.'type == ErrorResponse) {
+                            respond(caller, createControlResponse("Finished Compiling with errors."));
+                        } else {
+                            respond(caller, createControlResponse("Finished Compiling."));
+                        }
                     }
-                    respond(caller, createControlResponse("Finished Compiling."));
                 } else {
                    respond(caller, createErrorResponse("Invalid request data. Expected: " + CompileData.toString())); 
                 }

@@ -1,4 +1,4 @@
-const ExecuteRequest = "    ";
+const ExecuteRequest = "Execute";
 const StopRequest = "Stop";
 
 type RequestType ExecuteRequest|StopRequest;
@@ -8,7 +8,7 @@ type ExecuteData record {
     string balVersion;
 };
 
-type RequestData ExecuteData|();
+type RequestData ExecuteData|string|();
 
 type ExecutorRequest record {
     RequestType 'type;
@@ -23,5 +23,5 @@ type ResponseType ErrorResponse|DataResponse|ControlResponse;
 
 type ExecutorResponse record {
     ResponseType 'type;
-    string? data;
+    RequestData data;
 };

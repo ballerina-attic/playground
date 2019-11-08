@@ -47,7 +47,9 @@ if (!containerIdFile.exists()) {
 
 task start(type: Exec) {
     dependsOn build
-    commandLine "docker", "run", "--env", "COMPILER_HOST=ws://docker.for.mac.host.internal:9091/compiler", "-d", "-p", "9090:9090", imageTag
+    commandLine "docker", "run", "--env", "COMPILER_HOST=ws://docker.for.mac.host.internal:9091/compiler", 
+        "--env", "EXECUTOR_HOST=ws://docker.for.mac.host.internal:9092/executor", 
+        "-d", "-p", "9090:9090", imageTag
     standardOutput = new ByteArrayOutputStream()
 	doLast {
         containerIdFile.text = standardOutput.toString()
