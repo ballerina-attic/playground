@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: playground-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: stg.play.ballerina.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ballerina-playground-webserver-service
+          servicePort: 80
+      - path: /compiler
+        backend:
+          serviceName: ballerina-playground-compiler-service
+          servicePort: 80
+      - path: /controller
+        backend:
+          serviceName: ballerina-playground-controller-service
+          servicePort: 80
+      - path: /executor
+        backend:
+          serviceName: ballerina-playground-executor-service
+          servicePort: 80
