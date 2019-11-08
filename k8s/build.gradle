@@ -1,3 +1,4 @@
+
 task deployWebServer(type: Exec) {
     dependsOn(":docker:nginx:cloudBuild")
     environment("RELEASE_VERSION", "latest") // replace latest with project.version
@@ -20,6 +21,16 @@ task deployCompiler(type: Exec) {
     dependsOn(":docker:compiler:cloudBuild")
     environment("RELEASE_VERSION", "latest") // replace latest with project.version
     commandLine './deploy-compiler.sh'
+}
+
+task deployExecutor(type: Exec) {
+    dependsOn(":docker:executor:cloudBuild")
+    environment("RELEASE_VERSION", "latest") // replace latest with project.version
+    commandLine './deploy-executor.sh'
+}
+
+task undeployExecutor(type: Exec) {
+    commandLine './undeploy-executor.sh'
 }
 
 task deployController(type: Exec) {
@@ -48,6 +59,7 @@ task undeployIngressResources(type: Exec) {
 task deploy {
     dependsOn deployWebServer
     dependsOn deployCompiler
+    dependsOn deployExecutor
     dependsOn deployController
     dependsOn deployIngressResources
 }
@@ -55,6 +67,7 @@ task deploy {
 task undeploy {
     dependsOn undeployWebServer
     dependsOn undeployCompiler
+    dependsOn undeployExecutor
     dependsOn undeployController
     dependsOn undeployIngressResources
 }
