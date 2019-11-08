@@ -23,7 +23,7 @@ spec:
       volumes:
       - name: pvc-nfs
         persistentVolumeClaim:
-          claimName: nfs
+          claimName: pvc-build-cache-rw
       containers:
       - name: ballerina-playground-executor-container
         imagePullPolicy: Always
