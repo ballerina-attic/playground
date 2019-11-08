@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 spec:
-  loadBalancerIP: 35.211.244.235
+  loadBalancerIP: 104.196.198.30
   externalTrafficPolicy: Local
   type: LoadBalancer
   selector:
