@@ -8,7 +8,7 @@ export function ControlPanel() {
                     <img className="logo" src="images/ballerina-logo-play.svg" />
                     <RunButton />
                     <button className="w3-button w3-white w3-round w3-disabled">Diagram</button>
-                    <button className="w3-button w3-white w3-right w3-disabled">Share</button>
+                    <button className="w3-button w3-white w3-round w3-right w3-disabled">Share</button>
                 </div>
             </div>;
 }
