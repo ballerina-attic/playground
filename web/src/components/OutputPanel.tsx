@@ -29,8 +29,11 @@ export function OutputPanel() {
                 {waitingOnRemoteServer && <div className="control">Waiting on remote server</div>}
                 {
                     responses.map(({ type, data }, index) => {
+                        if (type === "Control" && data === "Executing Program.") {
+                            return <hr />;
+                        }
                         if (type === "Control" && (index !== responses.length - 1)) {
-                            return <span />;
+                            return;
                         }
                         return (
                             <div className={type.toLowerCase()}>
