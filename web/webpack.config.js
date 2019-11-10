@@ -137,7 +137,8 @@ module.exports = (env, argv) => {
                 CONTROLLER_BACKEND_URL: JSON.stringify(backendUrl)
             }),
             new CopyWebpackPlugin([
-                {from:'samples', to:'samples'} 
+                {from:'samples', to:'samples'},
+                {from:'images', to:'images'} 
             ])
         ]
     };

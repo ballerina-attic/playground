@@ -78,12 +78,17 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
     }
 
     private onRun() {
+        const { session, sourceCode, runInProgress } = this.state;
+        // prevent parallel runs per client
+        if (runInProgress) {
+            return;
+        }
         // clear console and set waiting on remote server.
         this.setState({
             responses: [],
+            runInProgress: true,
             waitingOnRemoteServer: true,
         });
-        const { session, sourceCode } = this.state;
         if (session) {
             if (!session.isOpen()) {
                 this.createConnection();
@@ -94,8 +99,16 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
 
     private onResponse(resp: PlaygroundResponse) {
         const { responses } = this.state;
+        let runInProgress = true;
+        const { type, data } = resp;
+        if (type === "Control"
+            && (data === "Finished Executing." || data === "Finished Compiling with errors.")
+            ) {
+            runInProgress = false;
+        }
         this.setState({
             responses: [...responses, resp],
+            runInProgress,
             waitingOnRemoteServer: false,
         });
     }
@@ -138,6 +151,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         const { responses } = this.state;
         this.setState({
             responses: [...responses, { type: "Error", data: msg }],
+            runInProgress: false,
         });
     }
 }

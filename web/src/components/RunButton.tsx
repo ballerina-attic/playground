@@ -6,7 +6,7 @@ export function RunButton() {
     return <PlaygroundContext.Consumer>
                 { ({ onRun, runInProgress }) => (<button
                         className={cn(
-                            "w3-button w3-white",
+                            "w3-button w3-white w3-round",
                             { "w3-disabled": runInProgress },
                         )}
                         onClick={onRun}

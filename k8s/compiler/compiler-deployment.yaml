@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ballerina-playground-compiler
 spec:
-  replicas: 2
+  replicas: 6
   selector:
     matchLabels:
       app: ballerina-playground-compiler
@@ -23,7 +23,7 @@ spec:
       volumes:
       - name: pvc-nfs
         persistentVolumeClaim:
-          claimName: nfs
+          claimName: pvc-build-cache-rw
       containers:
       - name: ballerina-playground-compiler-container
         imagePullPolicy: Always
