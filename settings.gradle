@@ -12,6 +12,9 @@ rootProject.name = "ballerina-playground"
 include ":frontend"
 project(":frontend").projectDir = file("web")
 
+include ":docker:redis-slave"
+project(":docker:redis-slave").projectDir = file("docker/redis-slave")
+
 include ":docker:nginx"
 project(":docker:nginx").projectDir = file("docker/nginx")
 

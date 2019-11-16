@@ -1,3 +1,4 @@
+def namespace = 'ballerina-playground-v2';
 
 task deployWebServer(type: Exec) {
     dependsOn(":docker:nginx:cloudBuild")
@@ -27,6 +28,18 @@ task deployExecutor(type: Exec) {
     dependsOn(":docker:executor:cloudBuild")
     environment("RELEASE_VERSION", "latest") // replace latest with project.version
     commandLine './deploy-executor.sh'
+}
+
+task deployRedis(type: Exec) {
+    dependsOn(":docker:redis-slave:cloudBuild")
+    environment("RELEASE_VERSION", project.version)
+    environment("BPG_NAMESPACE", namespace)
+    commandLine './deploy-redis.sh'
+}
+
+task undeployRedis(type: Exec) {
+    environment("BPG_NAMESPACE", namespace)
+    commandLine './undeploy-redis.sh'
 }
 
 task undeployExecutor(type: Exec) {
