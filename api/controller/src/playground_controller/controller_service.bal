@@ -15,7 +15,13 @@ service controllerService on new http:Listener(9090) {
                 if (reqData is RunData) {
                     error? runStatus = run(caller, reqData);
                     if (runStatus is error) {
-                        log:printError("Error while running: " + runStatus.reason());
+                        string msg = "Error while running: " + runStatus.reason();
+                        json|error jsonResponse = createJSONResponse(createErrorResponse(msg));
+                        if (jsonResponse is error) {
+                            log:printError(msg + "\n" + jsonResponse.reason());
+                        } else {
+                            respondAndHandleErrors(caller, jsonResponse.toString());
+                        }
                     }
                 } else {
                     respondAndHandleErrors(caller, "Invalid Request Data for Run Cmd. ");
