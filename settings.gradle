@@ -41,3 +41,6 @@ project(":k8s").projectDir = file("k8s")
 
 include ":utils:compiler-plugin"
 project(":utils:compiler-plugin").projectDir = file("utils/compiler-plugin")
+
+include ":utils:redis-client"
+project(":utils:redis-client").projectDir = file("utils/redis-client")
