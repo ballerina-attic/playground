@@ -1,6 +1,7 @@
 import ballerina/http;
 import ballerina/system;
 import ballerina/log;
+import playground_commons as commons;
 
 final string RESPONSE_HANDLER = "RESPONSE_HANDLER";
 final string POST_COMPILE_CALLBACK = "POST_COMPILE_CALLBACK";
@@ -111,7 +112,7 @@ function invokeCompiler(ResponseHandler respHandler, RunData data,
 }
 
 function run(http:WebSocketCaller caller, RunData data) returns error? {
-    string cacheId = getCacheId(data.sourceCode, data.balVersion);
+    string cacheId = commons:getCacheId(data.sourceCode, data.balVersion);
     log:printDebug("Cache ID for Request : " + cacheId);
 
     ResponseHandler respHandler = function(PlaygroundResponse|string resp, boolean cache = true) {
@@ -133,7 +134,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
             log:printError("Error while responding. " + respondStatus.reason());
         }
         if (cache) {
-            redisPushToList(cacheId, stringResponse);
+            commons:redisPushToList(cacheId, stringResponse);
         } 
     };
 
@@ -145,9 +146,9 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
             }
         }
     };
-    if (redisContains(cacheId)) {
+    if (commons:redisContains(cacheId)) {
         log:printDebug("Found cached responses. ");
-        string[] cachedResponses = redisGetList(cacheId);
+        string[] cachedResponses = commons:redisGetList(cacheId);
         foreach string response in cachedResponses {
             respHandler(response, false);
         }
