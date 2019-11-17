@@ -133,10 +133,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
             log:printError("Error while responding. " + respondStatus.reason());
         }
         if (cache) {
-            error? status = redisPushToList(cacheId, stringResponse);
-            if (status is error) {
-                log:printError("Error while caching: " + status.reason());   
-            }
+            redisPushToList(cacheId, stringResponse);
         } 
     };
 
@@ -148,9 +145,9 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
             }
         }
     };
-    if (check redisContains(cacheId)) {
+    if (redisContains(cacheId)) {
         log:printDebug("Found cached responses. ");
-        string[] cachedResponses = check redisGetList(cacheId);
+        string[] cachedResponses = redisGetList(cacheId);
         foreach string response in cachedResponses {
             respHandler(response, false);
         }
