@@ -38,11 +38,11 @@ public class RedisClient {
     }
 
     public Jedis getWriteClient() {
-        return slavePool.getResource();
+        return masterPool.getResource();
     }
 
     public Jedis getReadClient() {
-        return masterPool.getResource();
+        return slavePool.getResource();
     }
 
     @Override
