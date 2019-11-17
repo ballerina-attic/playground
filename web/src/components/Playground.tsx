@@ -101,9 +101,10 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         const { responses } = this.state;
         let runInProgress = true;
         const { type, data } = resp;
-        if (type === "Control"
-            && (data === "Finished Executing." || data === "Finished Compiling with errors.")
-            ) {
+        if (type === "Error" ||
+            (type === "Control"
+                && (data === "Finished Executing."
+                    || data === "Finished Compiling with errors."))) {
             runInProgress = false;
         }
         this.setState({
@@ -135,8 +136,12 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         if (evt instanceof Error) {
             this.printError((evt as Error).message);
         } else {
-            this.printError("Unknown Error occurred. ");
+            this.printError("Error connecting to remote server. ");
         }
+        this.setState({
+            runInProgress: false,
+            waitingOnRemoteServer: false,
+        });
     }
 
     private onConnectionOpen(evt: Event) {
