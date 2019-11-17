@@ -2,4 +2,28 @@
 org-name= "ballerina.io"
 version= "1.0.0"
 
+[platform]
+target = "java8"
+
+    [[platform.libraries]]
+    artifactId = "redis-client"
+    version = "@project.version@"
+    path = "./libs/redis-client-1.0.0-SNAPSHOT.jar"
+    groupId = "ballerina"
+    modules = ["playground_controller"]
+
+    [[platform.libraries]]
+    artifactId = "jedis"
+    version = "@project.version@"
+    path = "./libs/jedis-2.9.3.jar"
+    groupId = "ballerina"
+    modules = ["playground_controller"]
+
+    [[platform.libraries]]
+    artifactId = "commons-pool"
+    version = "@project.version@"
+    path = "./libs/commons-pool2-2.4.3.jar"
+    groupId = "ballerina"
+    modules = ["playground_controller"]
+
 [dependencies]

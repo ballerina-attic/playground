@@ -1,4 +1,9 @@
 org_name = "ballerina.io"
 version = "1.0.0"
 lockfile_version = "1.0.0"
-ballerina_version = "1.0.2"
+ballerina_version = "1.0.3"
+
+[[imports."ballerina.io/playground_controller:1.0.0"]]
+org_name = "ballerinax"
+name = "java"
+version = "0.0.0"

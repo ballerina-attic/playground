@@ -1,0 +1,6 @@
+plugins {
+    id 'java-library'
+}
+dependencies {
+    implementation 'redis.clients:jedis:2.9.3'
+}
