@@ -26,4 +26,6 @@ type PlaygroundResponse record {
     string? data;
 };
 
-type CompilerCallback function (boolean isSuccess) returns ();
+type CompilerCompletionCallback function (boolean isSuccess) returns ();
+
+type ResponseHandler function (PlaygroundResponse|string resp, boolean cache);

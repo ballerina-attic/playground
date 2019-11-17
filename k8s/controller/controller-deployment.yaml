@@ -32,10 +32,10 @@ spec:
           name: EXECUTOR_HOST
           value: ws://ballerina-playground-executor-service.${BPG_NAMESPACE}.svc.cluster.local/executor
         -
-          name: REDIS_SLAVE_HOST
+          name: REDIS_READ_HOST
           value: redis-slave.${BPG_NAMESPACE}.svc.cluster.local
         -
-          name: REDIS_MASTER_HOST
+          name: REDIS_WRITE_HOST
           value: redis-master.${BPG_NAMESPACE}.svc.cluster.local
         resources:
           requests:

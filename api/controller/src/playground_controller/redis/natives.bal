@@ -15,7 +15,8 @@ public function redisGetList(string key) returns string[] {
         balArray[index] = <string> java:toString(arrays:get(javaArray, index));
         index += 1;
     }
-    return balArray;
+    // make responses FIFO
+    return balArray.reverse();
 }
 
 function redisGetListinternal(string key) returns handle = @java:Method {
