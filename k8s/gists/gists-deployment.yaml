@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ballerina-playground-gists-deployment
+  labels:
+    app: ballerina-playground-gists
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: ballerina-playground-gists
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: ballerina-playground-gists
+    spec:
+      containers:
+      - name: ballerina-playground-gists-container
+        imagePullPolicy: Always
+        image: gcr.io/${BPG_GCP_PROJECT_ID}/playground-gists-api:${RELEASE_VERSION}
+        env:
+        -
+          name: REDIS_READ_HOST
+          value: redis-slave.${BPG_NAMESPACE}.svc.cluster.local
+        -
+          name: REDIS_WRITE_HOST
+          value: redis-master.${BPG_NAMESPACE}.svc.cluster.local
+        - 
+          name: GITHUB_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-credentials
+              key: token
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 9090
+          
