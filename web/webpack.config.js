@@ -16,7 +16,7 @@ module.exports = (env, argv) => {
             : "ws://localhost:9090/controller";
     const gistsApiUrl = isProduction 
             ? "https://play.ballerina.io/gists"
-            : "http://localhost:9090/gists";
+            : "http://localhost:9093/gists";
     return {
         mode: "development",
     
@@ -142,7 +142,8 @@ module.exports = (env, argv) => {
             }),
             new CopyWebpackPlugin([
                 {from:'samples', to:'samples'},
-                {from:'images', to:'images'} 
+                {from:'images', to:'images'},
+                {from:'favicons', to:''} 
             ])
         ]
     };
