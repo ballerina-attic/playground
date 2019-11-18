@@ -4,8 +4,12 @@ configurations {
     }
 }
 
+def env = System.getenv()
+def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
+def imageTag = 'gcr.io/' + gcpProjectID +'/playground-gists-api:' + project.version
+
 dependencies {
-    api project(path: ":api:controller", configuration: "controller")
+    api project(path: ":api:controller", configuration: "gists_api")
 }
 
 task cleanResources(type: Delete) {
@@ -27,12 +31,9 @@ def inputFiles = [
 task cloudBuild(type: Exec) {
     dependsOn copyApi
     inputs.files(inputFiles)
-    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", "."
+    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", 
+            '--substitutions=_IMAGE_TAG=' + imageTag, "."
 }
-
-def env = System.getenv()
-def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
-def imageTag = 'gcr.io/' + gcpProjectID +'/playground-controller:' + project.version
 
 task build(type: Exec) {
     dependsOn copyApi
@@ -47,12 +48,10 @@ if (!containerIdFile.exists()) {
 
 task start(type: Exec) {
     dependsOn build
-    commandLine "docker", "run", 
-        "--env", "COMPILER_HOST=ws://docker.for.mac.host.internal:9091/compiler", 
-        "--env", "EXECUTOR_HOST=ws://docker.for.mac.host.internal:9092/executor",
+    commandLine "docker", "run",
         "--env", "REDIS_WRITE_HOST=docker.for.mac.host.internal",
         "--env", "REDIS_READ_HOST=docker.for.mac.host.internal",
-        "-d", "-p", "9090:9090", imageTag
+        "-d", "-p", "9093:9090", imageTag
     standardOutput = new ByteArrayOutputStream()
 	doLast {
         containerIdFile.text = standardOutput.toString()
