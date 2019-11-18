@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Gist, PlaygroundResponse, PlaySession, share } from "../utils/client";
+import { Gist, PlaygroundResponse, PlaySession, share, loadGistFile, GistFile } from "../utils/client";
 import { loadSample } from "../utils/samples";
 import { CodeEditor } from "./CodeEditor";
 import { ControlPanel } from "./ControlPanel";
@@ -44,11 +44,23 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
     public componentDidMount() {
         this.createConnection();
         setTimeout(() => {
-            loadSample("hello.bal")
-                .then(this.onCodeChange.bind(this))
-                .catch((error) => {
-                    this.printError(error.message);
-                });
+            const params = new URLSearchParams(location.search);
+            const gistId = params.get("gist");
+            const fileName = params.get("file");
+            if (gistId && fileName) {
+                loadGistFile(gistId, fileName)
+                    .then((gistFile: GistFile) => {
+                        this.onCodeChange(gistFile.content);
+                    }, (reason: string) => {
+                        this.printError(reason);
+                    });
+            } else {
+                loadSample("hello.bal")
+                    .then(this.onCodeChange.bind(this))
+                    .catch((error) => {
+                        this.printError(error.message);
+                    });
+            }
         }, 200);
     }
 

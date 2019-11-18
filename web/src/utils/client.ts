@@ -126,6 +126,24 @@ export function share(content: string): Promise<Gist> {
         xhr.send(json);
     });
 }
+
+export function loadGistFile(gistId: string, fileName: string): Promise<GistFile> {
+    return new Promise((resolve, reject) => {
+        const req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    resolve(JSON.parse(this.responseText) as GistFile);
+                } else {
+                    reject("Error: " + this.responseText);
+                }
+            }
+        };
+        req.open("GET", gistsApiUrl + "/" + gistId + "/" + fileName, true);
+        req.send();
+    });
+}
+
 export interface Gist {
     url: string;
     id: string;
