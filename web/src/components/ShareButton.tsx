@@ -12,6 +12,11 @@ export function ShareButton() {
                         onClick={onShare}
                     >
                         Share
+                        {shareInProgress &&
+                            <span className="loading">
+                                <span>.</span><span>.</span><span>.</span>
+                            </span>
+                        }
                 </button>)
 
                 }

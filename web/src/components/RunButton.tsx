@@ -12,6 +12,11 @@ export function RunButton() {
                         onClick={onRun}
                     >
                         Run
+                        {runInProgress &&
+                            <span className="loading">
+                                <span>.</span><span>.</span><span>.</span>
+                            </span>
+                        }
                 </button>)
 
                 }
