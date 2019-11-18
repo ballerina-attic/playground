@@ -5,12 +5,12 @@ const GISTS_RESOURCE = "gists";
 
 public type GistClient client object {
 
-    string accessToken;
+    string? accessToken;
     http:Client restClient;
 
-    public function __init(GithubClientConfig config) {
-        self.accessToken = config.token;
-        self.restClient = new (API_HOST, config.httpClientConfig);
+    public function __init(GithubClientConfig config = {}) {
+        self.accessToken = config?.token;
+        self.restClient = new (API_HOST, config?.httpClientConfig);
     }
 
     public remote function createGist(string fileName, 
@@ -19,7 +19,7 @@ public type GistClient client object {
             "description": description,
             "public": true,
             "files": {
-                fileName: {
+                [fileName]: {
                     "content": content
                 }
             }
@@ -37,7 +37,9 @@ public type GistClient client object {
 
     private function createRequest(json payload = ()) returns http:Request {
         http:Request req = new();
-        req.setHeader("Authorization", "token " + self.accessToken);
+        if (self.accessToken is string) {
+            req.setHeader("Authorization", "token " + <string> self.accessToken);
+        }
         req.setHeader("Accept", "application/vnd.github.v3+json");
         if (!(payload is ())) {
             req.setJsonPayload(payload);
@@ -47,7 +49,7 @@ public type GistClient client object {
 };
 
 public type GithubClientConfig record {
-    string token;
-    http:ClientConfiguration httpClientConfig;
+    string token?;
+    http:ClientConfiguration httpClientConfig?;
 };
 
