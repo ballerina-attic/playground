@@ -40,6 +40,7 @@ function createErrorResponse(error err) returns http:Response {
     http:Response errorResp = new;
     errorResp.statusCode = 500;
     errorResp.setTextPayload(err.reason() + "\n" + err.detail().toString());
+    log:printError("Error: ", err);
     return errorResp;
 }
 

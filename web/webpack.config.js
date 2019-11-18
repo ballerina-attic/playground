@@ -11,9 +11,12 @@ const MONACO_DIR = path.resolve(__dirname, './node_modules/monaco-editor');
 
 module.exports = (env, argv) => {
     const isProduction = (argv.mode === 'production');
-    const backendUrl = isProduction 
+    const controllerUrl = isProduction 
             ? "wss://play.ballerina.io/controller"
             : "ws://localhost:9090/controller";
+    const gistsApiUrl = isProduction 
+            ? "https://play.ballerina.io/gists"
+            : "http://localhost:9090/gists";
     return {
         mode: "development",
     
@@ -134,7 +137,8 @@ module.exports = (env, argv) => {
                 features: ['bracketMatching']
             }),
             new webpack.DefinePlugin({
-                CONTROLLER_BACKEND_URL: JSON.stringify(backendUrl)
+                CONTROLLER_BACKEND_URL: JSON.stringify(controllerUrl),
+                GISTS_API_BACKEND_URL: JSON.stringify(gistsApiUrl)
             }),
             new CopyWebpackPlugin([
                 {from:'samples', to:'samples'},

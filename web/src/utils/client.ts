@@ -95,3 +95,55 @@ export class PlaySession {
         }
     }
 }
+
+declare const GISTS_API_BACKEND_URL: string;
+const gistsApiUrl = GISTS_API_BACKEND_URL;
+
+export function share(content: string): Promise<Gist> {
+    return new Promise((resolve, reject) => {
+        const data = {
+            content,
+            description: "Ballerina Playground",
+            fileName: "play.bal",
+        };
+        const json = JSON.stringify(data);
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", gistsApiUrl, true);
+        xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        xhr.onload = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    resolve(JSON.parse(xhr.responseText) as Gist);
+                } else {
+                    reject("Error sharing." + xhr.statusText
+                        + ", Status Code: " + xhr.status);
+                }
+            }
+        };
+        xhr.onerror = (ev) => {
+            reject("Error invoking sharing api.");
+        };
+        xhr.send(json);
+    });
+}
+export interface Gist {
+    url: string;
+    id: string;
+    html_url: string;
+    truncated: boolean;
+    files: Map<string, GistFile>;
+    description: string;
+    public: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface GistFile {
+    filename: string;
+    type: string;
+    language: string;
+    raw_url: string;
+    size: number;
+    truncated: boolean;
+    content: string;
+}
