@@ -47,8 +47,11 @@ if (!containerIdFile.exists()) {
 
 task start(type: Exec) {
     dependsOn build
-    commandLine "docker", "run", "--env", "COMPILER_HOST=ws://docker.for.mac.host.internal:9091/compiler", 
-        "--env", "EXECUTOR_HOST=ws://docker.for.mac.host.internal:9092/executor", 
+    commandLine "docker", "run", 
+        "--env", "COMPILER_HOST=ws://docker.for.mac.host.internal:9091/compiler", 
+        "--env", "EXECUTOR_HOST=ws://docker.for.mac.host.internal:9092/executor",
+        "--env", "REDIS_WRITE_HOST=docker.for.mac.host.internal",
+        "--env", "REDIS_READ_HOST=docker.for.mac.host.internal",
         "-d", "-p", "9090:9090", imageTag
     standardOutput = new ByteArrayOutputStream()
 	doLast {

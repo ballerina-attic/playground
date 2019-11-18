@@ -7,3 +7,13 @@ ballerina_version = "1.0.3"
 org_name = "ballerinax"
 name = "java"
 version = "0.0.0"
+
+[[imports."ballerina.io/playground_controller:1.0.0"]]
+org_name = "ballerinax"
+name = "java.arrays"
+version = "0.0.0"
+
+[[imports."ballerinax/java.arrays:0.0.0"]]
+org_name = "ballerinax"
+name = "java"
+version = "0.0.0"
