@@ -6,16 +6,17 @@ export function ShareButton() {
     return <PlaygroundContext.Consumer>
                 { ({ onShare, shareInProgress }) => (<button
                         className={cn(
-                            "w3-button w3-white w3-round",
-                            { "w3-disabled": shareInProgress },
+                            "w3-button w3-white w3-round share-button",
                         )}
-                        onClick={onShare}
+                        onClick={shareInProgress ? () => undefined : onShare}
                     >
-                        Share
                         {shareInProgress &&
                             <span className="loading">
                                 <span>.</span><span>.</span><span>.</span>
                             </span>
+                        }
+                        {!shareInProgress &&
+                            <span>Share</span>
                         }
                 </button>)
 
