@@ -4,6 +4,7 @@ import { loadSample } from "../utils/samples";
 import { CodeEditor } from "./CodeEditor";
 import { ControlPanel } from "./ControlPanel";
 import { OutputPanel } from "./OutputPanel";
+import * as clipboard from "clipboard-polyfill"
 import "./Playground.less";
 
 declare const CONTROLLER_BACKEND_URL: string;
@@ -13,6 +14,7 @@ export interface IPlaygroundState {
     sourceCode: string;
     runInProgress: boolean;
     shareInProgress: boolean;
+    displayCopiedToCB: boolean;
     showDiagram: boolean;
     responses: PlaygroundResponse[];
     session: PlaySession;
@@ -31,6 +33,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
     constructor(props: {}) {
         super(props);
         this.state = {
+            displayCopiedToCB: false,
             responses: [],
             runInProgress: false,
             session: new PlaySession(controllerUrl),
@@ -108,9 +111,16 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
                 params.set("gist", gist.id);
                 params.set("file", "play.bal");
                 window.history.replaceState({}, "", `${location.pathname}?${params}`);
+                clipboard.writeText("https://play.ballerina.io" + `${location.pathname}?${params}`);
                 this.setState({
+                    displayCopiedToCB: true,
                     shareInProgress: false,
                 });
+                setTimeout(() => {
+                    this.setState({
+                        displayCopiedToCB: false,
+                    });
+                }, 3000);
             }, (reason: string) => {
                 this.printError(reason);
                 this.setState({

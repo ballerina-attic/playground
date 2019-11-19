@@ -1,5 +1,5 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', 'gcr.io/$PROJECT_ID/playground-web', '.' ]
+  args: [ 'build', '-t', '$_IMAGE_TAG', '.' ]
 images:
-- 'gcr.io/$PROJECT_ID/playground-web'
+- '$_IMAGE_TAG'

@@ -6,16 +6,17 @@ export function RunButton() {
     return <PlaygroundContext.Consumer>
                 { ({ onRun, runInProgress }) => (<button
                         className={cn(
-                            "w3-button w3-white w3-round",
-                            { "w3-disabled": runInProgress },
+                            "w3-button w3-white w3-round run-button",
                         )}
-                        onClick={onRun}
+                        onClick={runInProgress ? () => undefined : onRun}
                     >
-                        Run
                         {runInProgress &&
                             <span className="loading">
                                 <span>.</span><span>.</span><span>.</span>
                             </span>
+                        }
+                        {!runInProgress &&
+                            <span>Run</span>
                         }
                 </button>)
 
