@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.6",
+    "clipboard-polyfill": "^2.8.6",
     "monaco-editor": "^0.18.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
