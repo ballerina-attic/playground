@@ -18,6 +18,11 @@ export function ControlPanel() {
                             copied to clipboard.
                     </span>
                 }
+                <span className="w3-text w3-right download-text">Love it? <a
+                    target="_blank"
+                    href="https://ballerina.io/downloads/">
+                            download now</a>!
+                    </span>
             </div>
         </div>)}
     </PlaygroundContext.Consumer>;
