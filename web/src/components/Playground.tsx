@@ -111,7 +111,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
                 params.set("gist", gist.id);
                 params.set("file", "play.bal");
                 window.history.replaceState({}, "", `${location.pathname}?${params}`);
-                clipboard.writeText("https://play.ballerina.io/" + `${location.pathname}?${params}`);
+                clipboard.writeText("https://play.ballerina.io" + `${location.pathname}?${params}`);
                 this.setState({
                     displayCopiedToCB: true,
                     shareInProgress: false,
