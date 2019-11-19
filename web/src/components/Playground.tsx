@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PlaygroundResponse, PlaySession } from "../utils/client";
+import { Gist, GistFile, loadGistFile, PlaygroundResponse, PlaySession, share } from "../utils/client";
 import { loadSample } from "../utils/samples";
 import { CodeEditor } from "./CodeEditor";
 import { ControlPanel } from "./ControlPanel";
@@ -7,11 +7,12 @@ import { OutputPanel } from "./OutputPanel";
 import "./Playground.less";
 
 declare const CONTROLLER_BACKEND_URL: string;
-const backendUrl = CONTROLLER_BACKEND_URL;
+const controllerUrl = CONTROLLER_BACKEND_URL;
 
 export interface IPlaygroundState {
     sourceCode: string;
     runInProgress: boolean;
+    shareInProgress: boolean;
     showDiagram: boolean;
     responses: PlaygroundResponse[];
     session: PlaySession;
@@ -20,6 +21,7 @@ export interface IPlaygroundState {
 export interface IPlaygroundContext extends IPlaygroundState {
     updateContext: (newContext: Partial<IPlaygroundContext>) => void;
     onRun: () => void;
+    onShare: () => Promise<Gist>;
 }
 
 export const PlaygroundContext = React.createContext({} as IPlaygroundContext);
@@ -31,7 +33,8 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         this.state = {
             responses: [],
             runInProgress: false,
-            session: new PlaySession(backendUrl),
+            session: new PlaySession(controllerUrl),
+            shareInProgress: false,
             showDiagram: false,
             sourceCode: "",
             waitingOnRemoteServer: false,
@@ -41,11 +44,23 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
     public componentDidMount() {
         this.createConnection();
         setTimeout(() => {
-            loadSample("hello.bal")
-                .then(this.onCodeChange.bind(this))
-                .catch((error) => {
-                    this.printError(error.message);
-                });
+            const params = new URLSearchParams(location.search);
+            const gistId = params.get("gist");
+            const fileName = params.get("file");
+            if (gistId && fileName) {
+                loadGistFile(gistId, fileName)
+                    .then((gistFile: GistFile) => {
+                        this.onCodeChange(gistFile.content);
+                    }, (reason: string) => {
+                        this.printError(reason);
+                    });
+            } else {
+                loadSample("hello.bal")
+                    .then(this.onCodeChange.bind(this))
+                    .catch((error) => {
+                        this.printError(error.message);
+                    });
+            }
         }, 200);
     }
 
@@ -75,6 +90,33 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
                 }
             }
         }
+    }
+
+    private onShare() {
+        const { sourceCode, shareInProgress } = this.state;
+        // prevent parallel sharing
+        if (shareInProgress) {
+            return;
+        }
+        this.setState({
+            shareInProgress: true,
+        });
+        // share
+        share(sourceCode)
+            .then((gist: Gist) => {
+                const params = new URLSearchParams(location.search);
+                params.set("gist", gist.id);
+                params.set("file", "play.bal");
+                window.history.replaceState({}, "", `${location.pathname}?${params}`);
+                this.setState({
+                    shareInProgress: false,
+                });
+            }, (reason: string) => {
+                this.printError(reason);
+                this.setState({
+                    shareInProgress: false,
+                });
+            });
     }
 
     private onRun() {
@@ -124,6 +166,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         return {
             ...this.state,
             onRun: this.onRun.bind(this),
+            onShare: this.onShare.bind(this),
             updateContext: (newContext: Partial<IPlaygroundContext>) => {
                 this.setState({
                     ...newContext as IPlaygroundContext,

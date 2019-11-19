@@ -10,7 +10,7 @@ export function loadSample(fileName: string): Promise<string> {
                 }
             }
         };
-        req.open("GET", "./samples/" + fileName, true);
+        req.open("GET", "https://gist.githubusercontent.com/ballerina-github-bot/9253206c6817489fbda3369910e6fae4/raw/5ea7a071f21d2576569beb94b01002028bef5df1/hello_world.bal", true);
         req.send();
     });
 }

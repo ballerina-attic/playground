@@ -52,8 +52,20 @@ task deployController(type: Exec) {
     commandLine './deploy-controller.sh'
 }
 
+task deployGists(type: Exec) {
+    dependsOn(":docker:gists:cloudBuild")
+    environment("BPG_NAMESPACE", namespace)
+    environment("RELEASE_VERSION", project.version)
+    commandLine './deploy-gists.sh'
+}
+
 task undeployCompiler(type: Exec) {
     commandLine './undeploy-compiler.sh'
+}
+
+task undeployGists(type: Exec) {
+    environment("BPG_NAMESPACE", namespace)
+    commandLine './undeploy-gists.sh'
 }
 
 task undeployController(type: Exec) {

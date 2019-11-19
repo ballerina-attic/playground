@@ -2,17 +2,17 @@ import cn from "classnames";
 import * as React from "react";
 import { PlaygroundContext } from "./Playground";
 
-export function RunButton() {
+export function ShareButton() {
     return <PlaygroundContext.Consumer>
-                { ({ onRun, runInProgress }) => (<button
+                { ({ onShare, shareInProgress }) => (<button
                         className={cn(
                             "w3-button w3-white w3-round",
-                            { "w3-disabled": runInProgress },
+                            { "w3-disabled": shareInProgress },
                         )}
-                        onClick={onRun}
+                        onClick={onShare}
                     >
-                        Run
-                        {runInProgress &&
+                        Share
+                        {shareInProgress &&
                             <span className="loading">
                                 <span>.</span><span>.</span><span>.</span>
                             </span>

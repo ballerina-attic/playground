@@ -1,5 +1,5 @@
 [project]
-org-name= "ballerina.io"
+org-name= "ballerina.playground"
 version= "1.0.0"
 
 [dependencies]

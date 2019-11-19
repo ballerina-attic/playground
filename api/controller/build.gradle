@@ -1,6 +1,9 @@
 configurations {
     utils { }
-    apiJar {
+    controller {
+        transitive = false
+    }
+    gists_api {
         transitive = false
     }
 }
@@ -37,4 +40,5 @@ task build(type: Exec) {
     commandLine 'ballerina', 'build', '-a'
 }
 
-artifacts.add("apiJar", project.file("target/bin/playground_controller.jar"))
+artifacts.add("controller", project.file("target/bin/playground_controller.jar"))
+artifacts.add("gists_api", project.file("target/bin/playground_gists.jar"))
