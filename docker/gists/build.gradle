@@ -51,6 +51,7 @@ task start(type: Exec) {
     commandLine "docker", "run",
         "--env", "REDIS_WRITE_HOST=docker.for.mac.host.internal",
         "--env", "REDIS_READ_HOST=docker.for.mac.host.internal",
+        "--env", "GITHUB_ACCESS_TOKEN=<PUT_OAUTH_TOKEN_HERE>",
         "-d", "-p", "9093:9090", imageTag
     standardOutput = new ByteArrayOutputStream()
 	doLast {
