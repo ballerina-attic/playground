@@ -34,6 +34,11 @@ public function redisSet(string key, string value) = @java:Method {
     class:"org/ballerinalang/playground/cache/RedisCache"
 } external;
 
+public function redisRemove(string key) = @java:Method {
+    name: "remove",
+    class:"org/ballerinalang/playground/cache/RedisCache"
+} external;
+
 public function redisPushToList(string key, string value) = @java:Method {
     name: "pushToList",
     class:"org/ballerinalang/playground/cache/RedisCache"

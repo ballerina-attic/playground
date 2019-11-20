@@ -8,7 +8,7 @@ target = "java8"
     [[platform.libraries]]
     artifactId = "redis-client"
     version = "@project.version@"
-    path = "./libs/redis-client-1.0.0-SNAPSHOT.jar"
+    path = "./libs/redis-client-1.0.0-m1.jar"
     groupId = "ballerina"
     modules = ["playground_commons"]
 

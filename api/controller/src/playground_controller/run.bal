@@ -146,19 +146,47 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
             }
         }
     };
-    if (commons:redisContains(cacheId)) {
-        log:printDebug("Found cached responses. ");
-        string[] cachedResponses = commons:redisGetList(cacheId);
-        foreach string response in cachedResponses {
+    [boolean, boolean, string[]] checkCacheResult = checkCache(cacheId);
+    if (checkCacheResult[0] && checkCacheResult[1]) {
+        log:printDebug("Found valid cached responses. ");
+        foreach string response in checkCacheResult[2] {
             respHandler(response, false);
         }
     } else {
+        // invalidate cache entry if it exists & invalid
+        if (checkCacheResult[0] && !checkCacheResult[1]) {
+            commons:redisRemove(cacheId);
+        }
         log:printDebug("Cached responses not found. Compiling. ");
         error? compilerResult = invokeCompiler(respHandler, data, compilerCallBack);
         if (compilerResult is error) {
             log:printError("Error with compiler. " + compilerResult.reason());
         }
     }
+}
+
+
+# Check if a valid cache exists and return cache if it exists.
+#
+# + cacheId - cacheId Parameter 
+# + return - [isCacheAvailable, isCacheValid, cache]
+function checkCache(string cacheId) returns [boolean, boolean, string[]] {
+    if (commons:redisContains(cacheId)) {
+        string[] cachedResponses = commons:redisGetList(cacheId);
+        string lastResponse = cachedResponses[cachedResponses.length() - 1];
+        json|error jsonResponse = lastResponse.fromJsonString();
+        if (jsonResponse is json) {
+            PlaygroundResponse|error response = PlaygroundResponse.constructFrom(jsonResponse);
+            if (response is PlaygroundResponse) {
+                boolean isValid = response.'type == ControlResponse && 
+                    (response.data == "Finished Executing."
+                        || response.data == "Finished Compiling with errors.");
+                return [true, isValid, cachedResponses];
+            }
+        }
+        return [true, false, cachedResponses];
+    }
+    return [false, false, []];
 }
 
 function createJSONResponse(PlaygroundResponse reponse) returns json|error {

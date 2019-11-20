@@ -2,8 +2,6 @@ package org.ballerinalang.playground.cache;
 
 import redis.clients.jedis.Jedis;
 
-import java.util.List;
-
 /**
  * Cache Adaptor for Redis
  */
@@ -37,6 +35,12 @@ public class RedisCache {
     public static void set(String key, String value) {
         try (Jedis client = redisClient.getWriteClient()) {
             client.set(key, value);
+        }
+    }
+
+    public static void remove(String key) {
+        try (Jedis client = redisClient.getWriteClient()) {
+            client.del(key);
         }
     }
 
