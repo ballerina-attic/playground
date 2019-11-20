@@ -27,7 +27,7 @@ public class PlaygroundCompilerPlugin extends AbstractCompilerPlugin {
                             .collect(Collectors.toList())
                             .forEach(serviceNode -> {
                                 diagnosticLog.logDiagnostic(Diagnostic.Kind.ERROR, serviceNode.getPosition(),
-                                        "Running Ballerina services is not allowed in playground.");
+                                        "Running Ballerina services is not allowed in playground yet.");
                             });
                 });
     }

@@ -7,6 +7,10 @@ configurations {
     }
 }
 
+def env = System.getenv()
+def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
+def imageTag = 'gcr.io/' + gcpProjectID +'/playground-compiler:' + project.version
+
 dependencies {
     compilerPlugins project(":utils:compiler-plugin")
     api project(path: ":api:compiler", configuration: "apiJar")
@@ -35,13 +39,9 @@ task cloudBuild(type: Exec) {
     dependsOn copyCompilerPlugins
     inputs.files(inputFiles)
     environment("BALLERINA_VERSION", project.ext.ballerinaVersion)
-    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", 
-        '--substitutions=_BALLERINA_VERSION=' + project.ext.ballerinaVersion, "."
+    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml",
+        '--substitutions=_IMAGE_TAG=' + imageTag + ',_BALLERINA_VERSION=' + project.ext.ballerinaVersion, "."
 }
-
-def env = System.getenv()
-def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
-def imageTag = 'gcr.io/' + gcpProjectID +'/playground-compiler:' + project.version
 
 task build(type: Exec) {
     dependsOn copyApi

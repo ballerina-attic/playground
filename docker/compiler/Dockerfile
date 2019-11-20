@@ -4,10 +4,11 @@ FROM ballerina/ballerina:$BALLERINA_VERSION
 
 LABEL maintainer "ballerina.io"
 
-COPY plugins/*.jar $BALLERINA_HOME/bre/lib
-
 WORKDIR /api
 COPY api/*.jar /api
+
+COPY plugins/*.jar $BALLERINA_HOME/bre/lib/
+RUN cp $BALLERINA_HOME/bre/lib/*.jar $(ballerina home)/bre/lib/
 
 USER root
 

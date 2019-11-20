@@ -19,35 +19,17 @@ function getAppJar(string cacheId) returns string|error {
 
 function execute(ExecuteData data) returns ExecutorResponse|error {
     log:printDebug("Executing request: " + data.toString());
-    string? cacheId = getCacheId(data.sourceCode, data.balVersion);
-    if (cacheId is string) {
-        log:printDebug("Searching for cached output. Cache ID: " + cacheId);
-        boolean hasCachedOutputResult = hasCachedOutput(cacheId);
-        if (hasCachedOutputResult) {
-            string? cachedOutput = getCachedOutput(cacheId);
-            if (cachedOutput is string) {
-                log:printDebug("Found cached output. " + cachedOutput);
-                return createDataResponse(cachedOutput);
-            } else {
-                return createErrorResponse("Invalid cached output returned from cache.");
-            }
-        } else {
-            log:printDebug("Cached output not found.");
-            string appJar = check getAppJar(cacheId);
-            log:printDebug("Executing jar: " + appJar);
-            string cwd = check filepath:parent(appJar);
-            string|error execStatus = execJar(cwd, appJar);
-            if (execStatus is error) {
-                log:printError("Error while executing jar: " + execStatus.reason());
-                return createErrorResponse(execStatus.reason());
-            } else {
-                log:printDebug("Executed jar: " + execStatus);
-                setCachedOutput(cacheId, execStatus);
-                return createDataResponse(execStatus);
-            }
-        }
+    string cacheId = getCacheId(data.sourceCode, data.balVersion);
+    string appJar = check getAppJar(cacheId);
+    log:printDebug("Executing jar: " + appJar);
+    string cwd = check filepath:parent(appJar);
+    string|error execStatus = execJar(cwd, appJar);
+    if (execStatus is error) {
+        log:printError("Error while executing jar: " + execStatus.reason());
+        return createErrorResponse(execStatus.reason());
     } else {
-        return createErrorResponse("Cannot access cache");
+        log:printDebug("Executed jar: " + execStatus);
+        return createDataResponse(execStatus);
     }
 }
 
