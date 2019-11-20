@@ -48,7 +48,7 @@ task undeployExecutor(type: Exec) {
 
 task deployController(type: Exec) {
     dependsOn(":docker:controller:cloudBuild")
-    environment("RELEASE_VERSION", "latest") // replace latest with project.version
+    environment("RELEASE_VERSION", project.version)
     commandLine './deploy-controller.sh'
 }
 
