@@ -2,7 +2,7 @@ def namespace = 'ballerina-playground-v2';
 
 task deployWebServer(type: Exec) {
     dependsOn(":docker:nginx:cloudBuild")
-    environment("RELEASE_VERSION", "latest") // replace latest with project.version
+    environment("RELEASE_VERSION", project.version)
     commandLine './deploy-web-server.sh'
 }
 
@@ -20,13 +20,13 @@ task undeployNfs(type: Exec) {
 
 task deployCompiler(type: Exec) {
     dependsOn(":docker:compiler:cloudBuild")
-    environment("RELEASE_VERSION", "latest") // replace latest with project.version
+    environment("RELEASE_VERSION", project.version)
     commandLine './deploy-compiler.sh'
 }
 
 task deployExecutor(type: Exec) {
     dependsOn(":docker:executor:cloudBuild")
-    environment("RELEASE_VERSION", "latest") // replace latest with project.version
+    environment("RELEASE_VERSION", project.version)
     commandLine './deploy-executor.sh'
 }
 
@@ -73,7 +73,6 @@ task undeployController(type: Exec) {
 }
 
 task deployIngressResources(type: Exec) {
-    environment("RELEASE_VERSION", "latest") // replace latest with project.version
     commandLine './deploy-ingress-resources.sh'
 }
 
