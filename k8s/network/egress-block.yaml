@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-egress-traffic
+  namespace: ballerina-playground-v2
+spec:
+  policyTypes:
+  - Egress
+  podSelector:
+    matchLabels:
+      app: ballerina-playground-executor
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: ballerina-playground-controller
+  - ports:
+    - port: 53
+      protocol: TCP
+    - port: 53
+      protocol: UDP
+
