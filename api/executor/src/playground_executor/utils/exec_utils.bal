@@ -1,10 +1,21 @@
 import ballerina/io;
 import ballerina/lang.'string;
 import ballerina/system;
+import ballerina/runtime;
 
 public function execJar(string cwd, string jar) returns string|error {
     system:Process exec = check system:exec("java", {}, cwd , "-jar", jar);
+    // time out execution in 30 seconds
+    boolean timedOut = false;
+    worker timer {
+        runtime:sleep(30000);
+        exec.destroy();
+        timedOut = true;
+    }
     int exitCode = check exec.waitForExit();
+    if (timedOut) {
+        return error("Execution timed-out in 30 seconds.");
+    }
     if (exitCode == 0) {
         return check readFromByteChannel(exec.stdout());
     } else {
