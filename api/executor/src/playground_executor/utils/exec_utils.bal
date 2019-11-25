@@ -42,6 +42,8 @@ function readFromByteChannel(io:ReadableByteChannel byteChannel,
     while (true) {
         byte[]| error read = byteChannel.read(1);
         if (read is io:EofError) {
+            // respond with rest
+            newLineHandler(currentLine);
             break;
         } else if (read is error) {
             return <@untainted>read;
