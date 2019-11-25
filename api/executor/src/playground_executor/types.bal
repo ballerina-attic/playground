@@ -25,3 +25,5 @@ type ExecutorResponse record {
     ResponseType 'type;
     RequestData data;
 };
+
+type ResponseHandler function(ExecutorResponse resp);

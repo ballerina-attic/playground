@@ -17,20 +17,13 @@ function getAppJar(string cacheId) returns string|error {
     }
 }
 
-function execute(ExecuteData data) returns ExecutorResponse|error {
+function execute(ExecuteData data, ResponseHandler respHandler) returns error? {
     log:printDebug("Executing request: " + data.toString());
     string cacheId = getCacheId(data.sourceCode, data.balVersion);
     string appJar = check getAppJar(cacheId);
     log:printDebug("Executing jar: " + appJar);
     string cwd = check filepath:parent(appJar);
-    string|error execStatus = execJar(cwd, appJar);
-    if (execStatus is error) {
-        log:printError("Error while executing jar: " + execStatus.reason());
-        return createErrorResponse(execStatus.reason());
-    } else {
-        log:printDebug("Executed jar: " + execStatus);
-        return createDataResponse(execStatus);
-    }
+    check execJar(cwd, appJar, respHandler);
 }
 
 function createStringResponse(ExecutorResponse reponse) returns string|error {
