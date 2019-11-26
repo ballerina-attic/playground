@@ -14,16 +14,14 @@ service compilerService on new http:Listener(9090) {
                 RequestData reqData = request.data;
                 if (reqData is CompileData) {
                     respond(caller, createControlResponse("Compiling Program."));
-                    CompilerResponse|error cmpResp = compile(reqData);
+                    ResponseHandler respHandler = function(CompilerResponse resp) {
+                        respond(caller, resp);
+                    };
+                    error? cmpResp = compile(reqData, respHandler);
                     if (cmpResp is error) {
-                        respond(caller, createErrorResponse("Error while compiling. " + cmpResp.reason()));
-                    } else {
-                        respond(caller, cmpResp);
-                        if (cmpResp.'type == ErrorResponse) {
-                            respond(caller, createControlResponse("Finished Compiling with errors."));
-                        } else {
-                            respond(caller, createControlResponse("Finished Compiling."));
-                        }
+                        string msg = "Error while compiling. ." + cmpResp.reason();
+                        log:printError(msg);
+                        respond(caller, createErrorResponse(msg));
                     }
                 } else {
                    respond(caller, createErrorResponse("Invalid request data. Expected: " + CompileData.toString())); 

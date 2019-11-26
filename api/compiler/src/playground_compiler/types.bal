@@ -25,3 +25,5 @@ type CompilerResponse record {
     ResponseType 'type;
     string? data;
 };
+
+type ResponseHandler function(CompilerResponse resp);

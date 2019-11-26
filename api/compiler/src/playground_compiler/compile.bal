@@ -32,21 +32,13 @@ function createSourceFile(string cacheId, string sourceCode) returns string|erro
     }
 }
 
-function compile(CompileData data) returns CompilerResponse|error {
+function compile(CompileData data, ResponseHandler respHandler) returns error? {
     log:printDebug("Compiling request: " + data.toString());
     string cacheId = getCacheId(data.sourceCode, data.balVersion);
     string sourceFile = check createSourceFile(cacheId, data.sourceCode);
     string buildDir = check filepath:parent(sourceFile);
     log:printDebug("Using " + sourceFile + " for compilation.");
-    string|error execStatus = execBallerinaCmd(buildDir, "build", "app.bal");
-    if (execStatus is error) {
-        log:printError("Error while executing compile command. ", execStatus);
-        return createErrorResponse(execStatus.reason());
-    } else {
-        log:printDebug("Finished executing compile command. Output: " + execStatus);
-        string jarPath = check filepath:build(buildDir, "app.jar");
-        return createDataResponse(execStatus);
-    }
+    check execBallerinaCmd(respHandler, buildDir, "build", "app.bal");
 }
 
 function createStringResponse(CompilerResponse reponse) returns string|error {

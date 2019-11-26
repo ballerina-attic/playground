@@ -53,6 +53,7 @@ export function OutputPanel() {
     return <PlaygroundContext.Consumer>
         {({ responses, waitingOnRemoteServer }) => {
             let inExecutionPhase = false;
+            const lastResponse = responses[responses.length - 1];
             return <div className="output-panel w3-container">
                 {waitingOnRemoteServer &&
                 <div className="control">{createLoadingAnimation("waiting on remote server...")}</div>}
@@ -76,6 +77,12 @@ export function OutputPanel() {
                             </div>
                         );
                     })
+                }
+                {lastResponse && !(lastResponse.type === "Control" &&
+                    (lastResponse.data === "Finished Compiling with errors."
+                        || lastResponse.data === "Finished Executing."))
+                        &&
+                    <div className="control">{createLoadingAnimation("...")}</div>
                 }
             </div>;
         }}
