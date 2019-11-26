@@ -2,28 +2,44 @@ import ballerina/io;
 import ballerina/lang.'string;
 import ballerina/system;
 
-public function execBallerinaCmd(string? cwd = (), string... args) returns string|error {
+function execBallerinaCmd(ResponseHandler respHandler, string? cwd = (), string... args) returns error? {
     system:Process exec = check system:exec("ballerina", {}, cwd , ...args);
+    NewLineHandler outPutHandler = function(string line) {
+        respHandler(createDataResponse(line));
+    };
+    NewLineHandler errorHandler = function(string line) {
+        respHandler(createErrorResponse(line));
+    };
+    check readFromByteChannel(exec.stdout(), outPutHandler);
+    check readFromByteChannel(exec.stderr(), errorHandler);
     int exitCode = check exec.waitForExit();
     if (exitCode == 0) {
-        return check readFromByteChannel(exec.stdout());
+        respHandler(createControlResponse("Finished Compiling."));
     } else {
-        return error(check readFromByteChannel(exec.stderr()));
+        respHandler(createControlResponse("Finished Compiling with errors."));
     }
 }
 
-function readFromByteChannel(io:ReadableByteChannel byteChannel) returns string|error {
-    string content = "";
+type NewLineHandler function(string line);
+
+function readFromByteChannel(io:ReadableByteChannel byteChannel, 
+        NewLineHandler newLineHandler) returns error? {
+    string currentLine = "";
     while (true) {
-        byte[] | error read = byteChannel.read(1000);
+        byte[]| error read = byteChannel.read(1);
         if (read is io:EofError) {
+            // respond with rest
+            newLineHandler(currentLine);
             break;
         } else if (read is error) {
             return <@untainted>read;
         } else {
             string fromBytes = check 'string:fromBytes(read);
-            content += <@untainted>fromBytes;
+            currentLine += <@untainted>fromBytes;
+            if (fromBytes === "\n") {
+                newLineHandler(currentLine);
+                currentLine = "";
+            }
         }
     }
-    return content;
 }
