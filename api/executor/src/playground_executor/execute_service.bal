@@ -14,11 +14,12 @@ service executorService on new http:Listener(9090) {
                 RequestData reqData = request.data;
                 if (reqData is ExecuteData) {
                     respond(caller, createControlResponse("Executing Program."));
-                    ExecutorResponse|error cmpResp = execute(reqData);
-                    if (cmpResp is error) {
-                        respond(caller, createErrorResponse("Error while executing. " + cmpResp.reason()));
-                    } else {
-                        respond(caller, cmpResp);
+                    ResponseHandler respHandler = function(ExecutorResponse resp) {
+                        respond(caller, resp);
+                    };
+                    error? execStatus = execute(reqData, respHandler);
+                    if (execStatus is error) {
+                        respond(caller, createErrorResponse("Error while executing. " + execStatus.reason()));
                     }
                     respond(caller, createControlResponse("Finished Executing."));
                 } else {
