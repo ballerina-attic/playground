@@ -40,7 +40,7 @@ export function getOutputMsg(data: string) {
         case "Finished Executing.":
             msg = "execution complete."; break;
         case "Compiling Program.":
-            msg = "compiling..."; break;
+            msg = "waiting on compiler..."; break;
         case "Finished Compiling with errors.":
                     msg = "compilation failed :("; break;
         case "Executing Program.":
@@ -80,6 +80,8 @@ export function OutputPanel() {
                 }
                 {lastResponse && !(lastResponse.type === "Control" &&
                     (lastResponse.data === "Finished Compiling with errors."
+                        || lastResponse.data === "Compiling Program."
+                        || lastResponse.data === "Executing Program."
                         || lastResponse.data === "Finished Executing."))
                         &&
                     <div className="control">{createLoadingAnimation("...")}</div>
