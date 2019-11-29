@@ -17,5 +17,5 @@ allprojects {
 }
 subprojects {
     version = '1.0.0-m2'
-    ext.setProperty("ballerinaVersion", "1.0.1")
+    ext.setProperty("ballerinaVersion", "1.0.4")
 }
