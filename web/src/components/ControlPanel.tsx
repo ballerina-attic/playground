@@ -15,7 +15,7 @@ export function ControlPanel() {
                 {displayCopiedToCB &&
                     <span
                         className="w3-text w3-small w3-animate-opacity">
-                            copied to clipboard.
+                            copied to<br/>clipboard.
                     </span>
                 }
                 <span className="w3-text w3-right download-text w3-hide-small">Love it? <a

@@ -1,10 +1,10 @@
+import * as clipboard from "clipboard-polyfill";
 import * as React from "react";
 import { Gist, GistFile, loadGistFile, PlaygroundResponse, PlaySession, share } from "../utils/client";
 import { loadSample } from "../utils/samples";
 import { CodeEditor } from "./CodeEditor";
 import { ControlPanel } from "./ControlPanel";
 import { OutputPanel } from "./OutputPanel";
-import * as clipboard from "clipboard-polyfill"
 import "./Playground.less";
 
 declare const CONTROLLER_BACKEND_URL: string;
