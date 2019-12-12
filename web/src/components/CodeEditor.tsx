@@ -14,6 +14,7 @@ const MONACO_OPTIONS = {
     fontFamily: "\"Lucida Console\", Monaco, monospace",
     fontSize: 13,
     hideCursorInOverviewRuler: true,
+    lineNumbersMinChars: 1,
     matchBrackets: true,
     minimap: {
         enabled: false,
