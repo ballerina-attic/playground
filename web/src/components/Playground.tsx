@@ -8,7 +8,9 @@ import { OutputPanel } from "./OutputPanel";
 import "./Playground.less";
 
 declare const CONTROLLER_BACKEND_URL: string;
-const controllerUrl = CONTROLLER_BACKEND_URL;
+const controllerUrl = CONTROLLER_BACKEND_URL === ""
+        ? "wss://" + window.location.hostname + "/controller"
+        : CONTROLLER_BACKEND_URL;
 
 export interface IPlaygroundState {
     sourceCode: string;

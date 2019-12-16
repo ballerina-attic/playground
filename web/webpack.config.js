@@ -12,10 +12,10 @@ const MONACO_DIR = path.resolve(__dirname, './node_modules/monaco-editor');
 module.exports = (env, argv) => {
     const isProduction = (argv.mode === 'production');
     const controllerUrl = isProduction 
-            ? "wss://play.ballerina.io/controller"
+            ? ""
             : "ws://localhost:9090/controller";
     const gistsApiUrl = isProduction 
-            ? "https://play.ballerina.io/gists"
+            ? ""
             : "http://localhost:9093/gists";
     return {
         mode: "development",
