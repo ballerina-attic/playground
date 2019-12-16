@@ -11,29 +11,14 @@ kubectl create clusterrolebinding cluster-admin-binding \
 
 * Execute the following commands to deploy Ingres-nginx controller,
 ```
-kubectl apply -f ingress-controller.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.22.0/deploy/mandatory.yaml
 
 kubectl apply -f ingress-service.yaml
 ```
 
 ## Adding SSL certs to k8s 
 
-To create a self signed cert
 ```
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout certs/key -out certs/cert.pem -subj "/CN=stg.play.ballerina.io/O=stg.play.ballerina.io"
-```
+kubectl create secret tls play-stg-tls-secret --key <key-file-name> --cert <cert-file-name> --namespace=ballerina-playground-v2
 
 ```
-kubectl create secret tls play-stg-tls-secret --key certs/key --cert certs/cert.pem --namespace=ballerina-playground-v2
-
-```
-
-Disable HSTS
-
-```
-kubectl create configmap nginx-configuration --from-file nginx.properties -o yaml --dry-run | kubectl replace -n ingress-nginx -f -
-```
-
-
-
-
