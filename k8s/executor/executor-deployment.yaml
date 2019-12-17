@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ballerina-playground-executor
 spec:
-  replicas: 6
+  replicas: 1
   selector:
     matchLabels:
       app: ballerina-playground-executor

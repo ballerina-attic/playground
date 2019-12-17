@@ -10,7 +10,7 @@ spec:
     - ReadWriteMany
   nfs:
     server: nfs-server.${BPG_NAMESPACE}.svc.cluster.local
-    path: "/exports/cache_101"
+    path: "/exports"
 
 ---
 kind: PersistentVolumeClaim
