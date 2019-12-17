@@ -30,5 +30,5 @@ spec:
       volumes:
         - name: buildcache
           gcePersistentDisk:
-            pdName: ballerina-build-cache-staging
+            pdName: ballerina-build-cache
             fsType: ext4

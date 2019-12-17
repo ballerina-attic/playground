@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ballerina-playground-compiler
 spec:
-  replicas: 1
+  replicas: 6
   selector:
     matchLabels:
       app: ballerina-playground-compiler

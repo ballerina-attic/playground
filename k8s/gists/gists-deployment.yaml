@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ballerina-playground-gists
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: ballerina-playground-gists
