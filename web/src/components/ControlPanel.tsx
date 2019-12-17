@@ -14,8 +14,14 @@ export function ControlPanel() {
                 <ShareButton />
                 {displayCopiedToCB &&
                     <span
-                        className="w3-text w3-small w3-animate-opacity">
-                            copied to<br/>clipboard.
+                        className="w3-text w3-small w3-animate-opacity w3-hide-small">
+                            copied to clipboard.
+                    </span>
+                }
+                {displayCopiedToCB &&
+                    <span
+                        className="w3-text w3-small w3-animate-opacity w3-hide-medium w3-hide-large">
+                            copied.
                     </span>
                 }
                 <span className="w3-text w3-right download-text w3-hide-small">Love it? <a

@@ -97,7 +97,9 @@ export class PlaySession {
 }
 
 declare const GISTS_API_BACKEND_URL: string;
-const gistsApiUrl = GISTS_API_BACKEND_URL;
+const gistsApiUrl = GISTS_API_BACKEND_URL === ""
+    ? "https://" + window.location.hostname + "/gists"
+    : GISTS_API_BACKEND_URL;
 
 export function share(content: string): Promise<Gist> {
     return new Promise((resolve, reject) => {

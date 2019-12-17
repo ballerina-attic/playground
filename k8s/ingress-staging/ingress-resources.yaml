@@ -4,26 +4,32 @@ metadata:
   name: playground-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
 spec:
+  tls:
+    - hosts:
+        - stg-play.ballerina.io
+      secretName: play-stg-tls-secret
   rules:
-  - host: stg.play.ballerina.io
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: ballerina-playground-webserver-service
-          servicePort: 80
-      - path: /compiler
-        backend:
-          serviceName: ballerina-playground-compiler-service
-          servicePort: 80
-      - path: /controller
-        backend:
-          serviceName: ballerina-playground-controller-service
-          servicePort: 80
-      - path: /executor
-        backend:
-          serviceName: ballerina-playground-executor-service
-          servicePort: 80
+    - host: stg-play.ballerina.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ballerina-playground-webserver-service
+              servicePort: 80
+          - path: /compiler
+            backend:
+              serviceName: ballerina-playground-compiler-service
+              servicePort: 80
+          - path: /controller
+            backend:
+              serviceName: ballerina-playground-controller-service
+              servicePort: 80
+          - path: /executor
+            backend:
+              serviceName: ballerina-playground-executor-service
+              servicePort: 80
+          - path: /gists
+            backend:
+              serviceName: ballerina-playground-gists-service
+              servicePort: 80
