@@ -12,7 +12,7 @@ const buildCacheDir = "/build-cache";
 # + sourceCode - sourceCode
 # + return - Absolute path of the created file or an error
 # 
-function createSourceFile(string cacheId, string sourceCode) returns string|error {
+function createSourceFile(string cacheId, string sourceCode) returns @tainted string|error {
     if (file:exists(buildCacheDir)) {
         log:printDebug("Build cache is mounted. " );
         string cachedBuildDir = check filepath:build(buildCacheDir, cacheId);
@@ -32,13 +32,13 @@ function createSourceFile(string cacheId, string sourceCode) returns string|erro
     }
 }
 
-function compile(CompileData data, ResponseHandler respHandler) returns error? {
+function compile(CompileData data, ResponseHandler respHandler) returns @tainted  error? {
     log:printDebug("Compiling request: " + data.toString());
     string cacheId = getCacheId(data.sourceCode, data.balVersion);
     string sourceFile = check createSourceFile(cacheId, data.sourceCode);
     string buildDir = check filepath:parent(sourceFile);
     log:printDebug("Using " + sourceFile + " for compilation.");
-    check execBallerinaCmd(respHandler, buildDir, "build", "app.bal");
+    check execBallerinaCmd(respHandler, <@untainted>buildDir, "build", "app.bal");
 }
 
 function createStringResponse(CompilerResponse reponse) returns string|error {

@@ -2,7 +2,7 @@ import ballerina/io;
 import ballerina/lang.'string;
 import ballerina/system;
 
-function execBallerinaCmd(ResponseHandler respHandler, string? cwd = (), string... args) returns error? {
+function execBallerinaCmd(ResponseHandler respHandler, string? cwd = (), string... args) returns @tainted error? {
     system:Process exec = check system:exec("ballerina", {}, cwd , ...args);
     NewLineHandler outPutHandler = function(string line) {
         respHandler(createDataResponse(line));
@@ -23,7 +23,7 @@ function execBallerinaCmd(ResponseHandler respHandler, string? cwd = (), string.
 type NewLineHandler function(string line);
 
 function readFromByteChannel(io:ReadableByteChannel byteChannel, 
-        NewLineHandler newLineHandler) returns error? {
+        NewLineHandler newLineHandler) returns @tainted error? {
     string currentLine = "";
     while (true) {
         byte[]| error read = byteChannel.read(1);

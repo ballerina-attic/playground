@@ -13,9 +13,12 @@ allprojects {
         maven {
             url = 'http://maven.wso2.org/nexus/content/repositories/snapshots/'
         }
+        maven {
+            url = 'http://maven.wso2.org/nexus/content/repositories/orgballerinalang-1509/'
+        }
     }
 }
 subprojects {
-    version = '1.0.0-m3'
-    ext.setProperty("ballerinaVersion", "1.0.4")
+    version = '1.0.0-m5'
+    ext.setProperty("ballerinaVersion", "1.1.0")
 }

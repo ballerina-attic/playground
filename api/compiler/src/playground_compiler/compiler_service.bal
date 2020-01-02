@@ -17,7 +17,7 @@ service compilerService on new http:Listener(9090) {
                     ResponseHandler respHandler = function(CompilerResponse resp) {
                         respond(caller, resp);
                     };
-                    error? cmpResp = compile(reqData, respHandler);
+                    error? cmpResp = compile(<@untainted>reqData, respHandler);
                     if (cmpResp is error) {
                         string msg = "Error while compiling. ." + cmpResp.reason();
                         log:printError(msg);
