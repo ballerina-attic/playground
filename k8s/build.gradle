@@ -81,6 +81,7 @@ task undeployIngressResources(type: Exec) {
 }
 
 task deploy {
+    dependsOn deployGists
     dependsOn deployWebServer
     dependsOn deployCompiler
     dependsOn deployExecutor
@@ -89,6 +90,7 @@ task deploy {
 }
 
 task undeploy {
+    dependsOn undeployGists
     dependsOn undeployWebServer
     dependsOn undeployCompiler
     dependsOn undeployExecutor
