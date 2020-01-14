@@ -4,16 +4,18 @@ import ballerina/system;
 
 function execBallerinaCmd(ResponseHandler respHandler, string? cwd = (), string... args) returns @tainted error? {
     system:Process exec = check system:exec("ballerina", {}, cwd , ...args);
+    boolean compilationSuccess = true;
     NewLineHandler outPutHandler = function(string line) {
         respHandler(createDataResponse(line));
     };
     NewLineHandler errorHandler = function(string line) {
         respHandler(createErrorResponse(line));
+        compilationSuccess = false;
     };
     check readFromByteChannel(exec.stdout(), outPutHandler);
     check readFromByteChannel(exec.stderr(), errorHandler);
     int exitCode = check exec.waitForExit();
-    if (exitCode == 0) {
+    if (exitCode == 0 && compilationSuccess) {
         respHandler(createControlResponse("Finished Compiling."));
     } else {
         respHandler(createControlResponse("Finished Compiling with errors."));
