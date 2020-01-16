@@ -25,7 +25,7 @@ function invokeExecutor(ResponseHandler respHandler, RunData data) returns error
             log:printError("executor-proxy:OnError: " + err.reason());
 
             var respHandler = <ResponseHandler> conn.getAttribute(RESPONSE_HANDLER);
-            respHandler(createErrorResponse("Error while executing. " + err.reason()));
+            respHandler(createErrorResponse("Error while executing. " + err.reason()), true);
         }
     };
 
@@ -89,7 +89,7 @@ function invokeCompiler(ResponseHandler respHandler, RunData data,
             log:printError("compiler-proxy:OnError: " + err.reason());
 
             var respHandler = <ResponseHandler> conn.getAttribute(RESPONSE_HANDLER);
-            respHandler(createErrorResponse("Error while compiling. " + err.reason()));
+            respHandler(createErrorResponse("Error while compiling. " + err.reason()), true);
 
             CompilerCompletionCallback onCompletion = 
                 <CompilerCompletionCallback> conn.getAttribute(POST_COMPILE_CALLBACK);
@@ -115,7 +115,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
     string cacheId = commons:getCacheId(data.sourceCode, data.balVersion);
     log:printDebug("Cache ID for Request : " + cacheId);
 
-    ResponseHandler respHandler = function(PlaygroundResponse|string resp, boolean cache = true) {
+    ResponseHandler respHandler = function(PlaygroundResponse|string resp, boolean cache) {
         log:printDebug("Responding to frontend: \n" + resp.toString() + "\n");
         string stringResponse = "";
         if (resp is PlaygroundResponse) {

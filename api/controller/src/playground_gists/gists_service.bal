@@ -27,7 +27,7 @@ service gistsService on new http:Listener(9090) {
     }
     resource function get(http:Caller caller, http:Request request,
         string gistId, string fileName) {
-        commons:GistFile|error gistFile = getGistFile(gistId, fileName);
+        commons:GistFile|error gistFile = getGistFile(<@tained>gistId, fileName);
         if (gistFile is error) {
             respondAndHandleErrors(caller, createErrorResponse(gistFile));
         } else {
