@@ -2,6 +2,7 @@ import ballerina/http;
 import ballerina/system;
 import ballerina/log;
 import playground_commons as commons;
+import ballerinax/java;
 
 final string RESPONSE_HANDLER = "RESPONSE_HANDLER";
 final string POST_COMPILE_CALLBACK = "POST_COMPILE_CALLBACK";
@@ -134,7 +135,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
             log:printError("Error while responding. " + respondStatus.reason());
         }
         if (cache) {
-            commons:redisPushToList(cacheId, stringResponse);
+            commons:redisPushToList(java:fromString(cacheId), java:fromString(stringResponse));
         } 
     };
 
@@ -155,7 +156,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
     } else {
         // invalidate cache entry if it exists & invalid
         if (checkCacheResult[0] && !checkCacheResult[1]) {
-            commons:redisRemove(cacheId);
+            commons:redisRemove(java:fromString(cacheId));
         }
         log:printDebug("Cached responses not found. Compiling. ");
         error? compilerResult = invokeCompiler(respHandler, data, compilerCallBack);
@@ -171,7 +172,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
 # + cacheId - cacheId Parameter 
 # + return - [isCacheAvailable, isCacheValid, cache]
 function checkCache(string cacheId) returns [boolean, boolean, string[]] {
-    if (commons:redisContains(cacheId)) {
+    if (commons:redisContains(java:fromString(cacheId))) {
         string[] cachedResponses = commons:redisGetList(cacheId);
         string lastResponse = cachedResponses[cachedResponses.length() - 1];
         json|error jsonResponse = lastResponse.fromJsonString();

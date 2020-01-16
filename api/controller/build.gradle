@@ -16,6 +16,7 @@ task copyRedisClient(type: Copy) {
     dependsOn(':utils:redis-client:build')
     from configurations.utils
     into "libs" 
+    rename("redis-client-" + project.version + ".jar", "redis-client.jar")
 }
 
 def inputFiles = [
@@ -39,6 +40,7 @@ task build(type: Exec) {
     outputs.cacheIf { true }
     outputs.dir("target")
     commandLine 'ballerina', 'build', '-a'
+    ignoreExitValue false
 }
 
 artifacts.add("controller", project.file("target/bin/playground_controller.jar"))
