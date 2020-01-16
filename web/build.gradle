@@ -20,12 +20,24 @@ task install(type: Exec) {
     commandLine "npm", "i"
 }
 
+task clean(type: Delete) {
+   delete 'dist', 'node_modules'
+   followSymlinks = true
+}
+
 task build(type: Exec) {
+    dependsOn clean
     dependsOn install
     inputs.files(inputFiles)
     outputs.dir("dist")
     outputs.cacheIf({ true }) 
     commandLine "$projectDir/node_modules/.bin/webpack", "--mode=production"
+}
+
+task start(type: Exec) {
+    dependsOn install
+    inputs.files(inputFiles)
+    commandLine "$projectDir/node_modules/.bin/webpack-dev-server"
 }
 
 buildDir "dist"

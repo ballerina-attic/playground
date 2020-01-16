@@ -12,12 +12,7 @@ dependencies {
     api project(path: ":api:controller", configuration: "gists_api")
 }
 
-task cleanResources(type: Delete) {
-    delete "api"
-}
-
 task copyApi(type: Copy) {
-    dependsOn cleanResources
     dependsOn(':api:controller:build')
     from configurations.api
     into "api" 
@@ -28,7 +23,13 @@ def inputFiles = [
     project.file("Dockerfile")
 ]
 
+task clean(type: Delete) {
+   delete 'api', 'plugins'
+   followSymlinks = true
+}
+
 task cloudBuild(type: Exec) {
+    dependsOn clean
     dependsOn copyApi
     inputs.files(inputFiles)
     commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", 
@@ -36,6 +37,7 @@ task cloudBuild(type: Exec) {
 }
 
 task build(type: Exec) {
+    dependsOn clean
     dependsOn copyApi
     inputs.files(inputFiles)
     commandLine 'docker', 'build', '-t', imageTag, '.'
