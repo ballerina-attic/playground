@@ -2,6 +2,7 @@ import ballerina/http;
 import ballerina/system;
 import ballerina/log;
 import playground_commons as commons;
+import ballerinax/java;
 
 final string RESPONSE_HANDLER = "RESPONSE_HANDLER";
 final string POST_COMPILE_CALLBACK = "POST_COMPILE_CALLBACK";
@@ -25,7 +26,7 @@ function invokeExecutor(ResponseHandler respHandler, RunData data) returns error
             log:printError("executor-proxy:OnError: " + err.reason());
 
             var respHandler = <ResponseHandler> conn.getAttribute(RESPONSE_HANDLER);
-            respHandler(createErrorResponse("Error while executing. " + err.reason()));
+            respHandler(createErrorResponse("Error while executing. " + err.reason()), true);
         }
     };
 
@@ -89,7 +90,7 @@ function invokeCompiler(ResponseHandler respHandler, RunData data,
             log:printError("compiler-proxy:OnError: " + err.reason());
 
             var respHandler = <ResponseHandler> conn.getAttribute(RESPONSE_HANDLER);
-            respHandler(createErrorResponse("Error while compiling. " + err.reason()));
+            respHandler(createErrorResponse("Error while compiling. " + err.reason()), true);
 
             CompilerCompletionCallback onCompletion = 
                 <CompilerCompletionCallback> conn.getAttribute(POST_COMPILE_CALLBACK);
@@ -115,7 +116,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
     string cacheId = commons:getCacheId(data.sourceCode, data.balVersion);
     log:printDebug("Cache ID for Request : " + cacheId);
 
-    ResponseHandler respHandler = function(PlaygroundResponse|string resp, boolean cache = true) {
+    ResponseHandler respHandler = function(PlaygroundResponse|string resp, boolean cache) {
         log:printDebug("Responding to frontend: \n" + resp.toString() + "\n");
         string stringResponse = "";
         if (resp is PlaygroundResponse) {
@@ -134,7 +135,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
             log:printError("Error while responding. " + respondStatus.reason());
         }
         if (cache) {
-            commons:redisPushToList(cacheId, stringResponse);
+            commons:redisPushToList(java:fromString(cacheId), java:fromString(stringResponse));
         } 
     };
 
@@ -155,7 +156,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
     } else {
         // invalidate cache entry if it exists & invalid
         if (checkCacheResult[0] && !checkCacheResult[1]) {
-            commons:redisRemove(cacheId);
+            commons:redisRemove(java:fromString(cacheId));
         }
         log:printDebug("Cached responses not found. Compiling. ");
         error? compilerResult = invokeCompiler(respHandler, data, compilerCallBack);
@@ -171,7 +172,7 @@ function run(http:WebSocketCaller caller, RunData data) returns error? {
 # + cacheId - cacheId Parameter 
 # + return - [isCacheAvailable, isCacheValid, cache]
 function checkCache(string cacheId) returns [boolean, boolean, string[]] {
-    if (commons:redisContains(cacheId)) {
+    if (commons:redisContains(java:fromString(cacheId))) {
         string[] cachedResponses = commons:redisGetList(cacheId);
         string lastResponse = cachedResponses[cachedResponses.length() - 1];
         json|error jsonResponse = lastResponse.fromJsonString();

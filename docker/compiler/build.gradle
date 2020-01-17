@@ -34,7 +34,13 @@ def inputFiles = [
     project.file("resources")
 ]
 
+task clean(type: Delete) {
+   delete 'api', 'plugins'
+   followSymlinks = true
+}
+
 task cloudBuild(type: Exec) {
+    dependsOn clean
     dependsOn copyApi
     dependsOn copyCompilerPlugins
     inputs.files(inputFiles)
@@ -44,6 +50,7 @@ task cloudBuild(type: Exec) {
 }
 
 task build(type: Exec) {
+    dependsOn clean
     dependsOn copyApi
     dependsOn copyCompilerPlugins
     inputs.files(inputFiles)

@@ -10,15 +10,16 @@ def inputFiles = [
     project.file("src")
 ]
 
-task cloudBuild(type: Exec) {
-    inputs.files(inputFiles)
-    commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", "."
+task clean(type: Delete) {
+   delete 'target'
+   followSymlinks = true
 }
 
 def env = System.getenv()
 def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
 
 task build(type: Exec) {
+    dependsOn clean
     inputs.files(inputFiles)
     outputs.dir("target")
     outputs.cacheIf { true }

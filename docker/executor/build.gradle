@@ -8,12 +8,7 @@ dependencies {
     api project(path: ":api:executor", configuration: "apiJar")
 }
 
-task cleanResources(type: Delete) {
-    delete "api"
-}
-
 task copyApi(type: Copy) {
-    dependsOn cleanResources
     dependsOn(':api:executor:build')
     from configurations.api
     into "api" 
@@ -24,11 +19,17 @@ def inputFiles = [
     project.file("Dockerfile")
 ]
 
+task clean(type: Delete) {
+   delete 'api', 'plugins'
+   followSymlinks = true
+}
+
 def env = System.getenv()
 def gcpProjectID = env["BPG_GCP_PROJECT_ID"]
 def imageTag = 'gcr.io/' + gcpProjectID +'/playground-executor:' + project.version
 
 task cloudBuild(type: Exec) {
+    dependsOn clean
     dependsOn copyApi
     inputs.files(inputFiles)
     commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml", 
@@ -36,6 +37,7 @@ task cloudBuild(type: Exec) {
 }
 
 task build(type: Exec) {
+    dependsOn clean
     dependsOn copyApi
     inputs.files(inputFiles)
     commandLine 'docker', 'build', '-t', imageTag, '.'

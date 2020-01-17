@@ -1,13 +1,13 @@
 import ballerinax/java;
 import ballerinax/java.arrays;
 
-public function redisGet(string key) returns string = @java:Method {
+public function redisGet(handle key) returns handle = @java:Method {
     name: "get",
     class:"org/ballerinalang/playground/cache/RedisCache"
 } external;
 
 public function redisGetList(string key) returns string[] {
-    handle javaArray = redisGetListinternal(key);
+    handle javaArray = redisGetListinternal(java:fromString(key));
     int listLength = arrays:getLength(javaArray);
     int index = 0;
     string[] balArray = [];
@@ -19,32 +19,32 @@ public function redisGetList(string key) returns string[] {
     return balArray.reverse();
 }
 
-function redisGetListinternal(string key) returns handle = @java:Method {
+function redisGetListinternal(handle key) returns handle = @java:Method {
     name: "getList",
     class:"org/ballerinalang/playground/cache/RedisCache"
 } external;
 
-public function redisContains(string key) returns boolean = @java:Method {
+public function redisContains(handle key) returns boolean = @java:Method {
     name: "contains",
     class:"org/ballerinalang/playground/cache/RedisCache"
 } external;
 
-public function redisSet(string key, string value) = @java:Method {
+public function redisSet(handle key, handle value) = @java:Method {
     name: "set",
     class:"org/ballerinalang/playground/cache/RedisCache"
 } external;
 
-public function redisRemove(string key) = @java:Method {
+public function redisRemove(handle key) = @java:Method {
     name: "remove",
     class:"org/ballerinalang/playground/cache/RedisCache"
 } external;
 
-public function redisPushToList(string key, string value) = @java:Method {
+public function redisPushToList(handle key, handle value) = @java:Method {
     name: "pushToList",
     class:"org/ballerinalang/playground/cache/RedisCache"
 } external;
 
-public function redisSetArray(string key, string value) = @java:Method {
+public function redisSetArray(handle key, handle value) = @java:Method {
     name: "set",
     class:"org/ballerinalang/playground/cache/RedisCache"
 } external;

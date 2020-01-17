@@ -1,12 +1,17 @@
 org_name = "ballerina.playground"
 version = "1.0.0"
 lockfile_version = "1.0.0"
-ballerina_version = "1.0.4"
+ballerina_version = "1.1.0"
 
 [[imports."ballerina.playground/playground_controller:1.0.0"]]
 org_name = "ballerina.playground"
 name = "playground_commons"
 version = "1.0.0"
+
+[[imports."ballerina.playground/playground_controller:1.0.0"]]
+org_name = "ballerinax"
+name = "java"
+version = "0.0.0"
 
 [[imports."ballerina.playground/playground_gists:1.0.0"]]
 org_name = "ballerina.playground"
