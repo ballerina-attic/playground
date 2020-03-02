@@ -15,10 +15,3 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/ngin
 
 kubectl apply -f ingress-service.yaml
 ```
-
-## Adding SSL certs to k8s 
-
-```
-kubectl create secret tls play-stg-tls-secret --key <key-file-name> --cert <cert-file-name> --namespace=ballerina-playground-v2
-
-```
