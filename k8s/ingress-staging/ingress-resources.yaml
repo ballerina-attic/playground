@@ -4,11 +4,13 @@ metadata:
   name: playground-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    certmanager.k8s.io/cluster-issuer: letsencrypt-staging
+    kubernetes.io/tls-acme: "true"
 spec:
   tls:
-    - hosts:
-        - stg-play.ballerina.io
-      secretName: play-stg-tls-secret
+  - hosts:
+    - stg-play.ballerina.io
+    secretName: letsencrypt-staging
   rules:
     - host: stg-play.ballerina.io
       http:
