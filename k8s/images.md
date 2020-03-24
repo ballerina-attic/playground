@@ -2,4 +2,4 @@
 - compiler: gcr.io/ballerina-playground-200609/playground-compiler:1.0.0-20200324063933
 - executor: gcr.io/ballerina-playground-200609/playground-executor:1.0.0-20200324064200
 - gists: gcr.io/ballerina-playground-200609/playground-gists-api:1.0.0-20200324065201
-- web: gcr.io/ballerina-playground-200609/playground-web:1.0.0-20200324065251
+- web: gcr.io/ballerina-playground-200609/playground-web:1.0.0-20200324095704
