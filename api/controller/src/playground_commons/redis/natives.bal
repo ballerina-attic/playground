@@ -1,5 +1,5 @@
-import ballerinax/java;
-import ballerinax/java.arrays;
+import ballerina/java;
+import ballerina/java.arrays;
 
 public function redisGet(handle key) returns handle = @java:Method {
     name: "get",
