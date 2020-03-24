@@ -2,7 +2,7 @@ import ballerina/http;
 import ballerina/system;
 import ballerina/log;
 import playground_commons as commons;
-import ballerinax/java;
+import ballerina/java;
 
 final string RESPONSE_HANDLER = "RESPONSE_HANDLER";
 final string POST_COMPILE_CALLBACK = "POST_COMPILE_CALLBACK";
