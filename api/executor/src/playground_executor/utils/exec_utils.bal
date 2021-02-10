@@ -4,7 +4,7 @@ import ballerina/system;
 import ballerina/runtime;
 
 function execJar(string cwd, string jar, ResponseHandler respHandler) returns error? {
-    system:Process exec = check system:exec("java", {}, cwd , "-jar", jar);
+    system:Process exec = check system:exec("java11", {}, cwd , "-jar", jar);
     // time out execution in 30 seconds
     boolean timedOut = false;
     worker timer {

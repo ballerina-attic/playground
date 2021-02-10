@@ -11,14 +11,15 @@ allprojects {
             url = 'http://maven.wso2.org/nexus/content/repositories/releases/'
         }
         maven {
-            url = 'http://maven.wso2.org/nexus/content/repositories/snapshots/'
-        }
-        maven {
-            url = 'http://maven.wso2.org/nexus/content/repositories/orgballerinalang-1509/'
+            url = 'https://maven.pkg.github.com/ballerina-platform/ballerina-lang/'
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GH_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GH_REPO_TOKEN")
+            }
         }
     }
 }
 subprojects {
-    version = '1.0.0'
-    ext.setProperty("ballerinaVersion", "1.2.7")
+    version = '1.1.0'
+    ext.setProperty("ballerinaVersion", "2.0.0-alpha2")
 }

@@ -3,4 +3,5 @@ plugins {
 }
 dependencies {
     implementation 'org.ballerinalang:ballerina-lang:' + project.ext.ballerinaVersion
+    implementation 'org.ballerinalang:ballerina-tools-api:' + project.ext.ballerinaVersion
 }
