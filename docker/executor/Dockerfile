@@ -22,6 +22,8 @@ RUN tar -xf /ballerina/dist/OpenJDK11U-jre_x64_linux_hotspot_11.0.10_9.tar.gz -C
 
 ENV JAVA_HOME /ballerina/runtime/dependencies/jdk-11.0.10+9-jre
 
+RUN ln -s $(which /ballerina/runtime/dependencies/jdk-11.0.10+9-jre/bin/java) /usr/bin/java11
+
 EXPOSE 9090
 
 CMD ["java", "-jar", "/api/playground_executor.jar", "--b7a.log.level=ALL"]
