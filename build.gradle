@@ -14,7 +14,7 @@ allprojects {
             url = 'https://maven.pkg.github.com/ballerina-platform/ballerina-lang/'
             credentials {
                 username = project.findProperty("gpr.user") ?: System.getenv("GH_USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("GH_TOKEN")
+                password = project.findProperty("gpr.key") ?: System.getenv("GH_REPO_TOKEN")
             }
         }
     }
