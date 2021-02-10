@@ -3,7 +3,7 @@ import ballerina/lang.'string;
 import ballerina/system;
 
 function execBallerinaCmd(ResponseHandler respHandler, string? cwd = (), string... args) returns @tainted error? {
-    system:Process exec = check system:exec("ballerina", {}, cwd , ...args);
+    system:Process exec = check system:exec("bal", {}, cwd , ...args);
     boolean compilationSuccess = true;
     NewLineHandler outPutHandler = function(string line) {
         respHandler(createDataResponse(line));

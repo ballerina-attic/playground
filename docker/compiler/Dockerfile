@@ -1,22 +1,29 @@
-ARG BALLERINA_VERSION
+FROM openjdk:8u282-jre
 
-FROM ballerina/ballerina:$BALLERINA_VERSION
-
-LABEL maintainer "ballerina.io"
+LABEL maintainer "ballerina-dev@googlegroups.com"
 
 WORKDIR /api
 COPY api/*.jar /api
 
-COPY plugins/*.jar $BALLERINA_HOME/bre/lib/
-RUN cp $BALLERINA_HOME/bre/lib/*.jar $(ballerina home)/bre/lib/
+WORKDIR /ballerina
 
-USER root
+ADD https://dist.ballerina.io/downloads/swan-lake-alpha1/ballerina-swan-lake-alpha1.zip /ballerina/dist/
 
-RUN chown -R ballerina:troupe /api && \
-    chmod +x /api/playground_compiler.jar
+RUN unzip /ballerina/dist/ballerina-swan-lake-alpha1.zip -d /ballerina/ \
+    && mv /ballerina/ballerina* /ballerina/runtime
 
-USER ballerina
+ENV BALLERINA_HOME /ballerina/runtime
+ENV PATH $BALLERINA_HOME/bin:$PATH
+    
+ADD https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/OpenJDK11U-jre_x64_linux_hotspot_11.0.10_9.tar.gz /ballerina/dist/
+
+RUN tar -xf /ballerina/dist/OpenJDK11U-jre_x64_linux_hotspot_11.0.10_9.tar.gz -C /ballerina/runtime/dependencies \
+    && rm -rf /ballerina/dist
+
+ENV JAVA_HOME /ballerina/runtime/dependencies/jdk-11.0.10+9-jre
+
+RUN ln -s $(which /ballerina/runtime/dependencies/jdk-11.0.10+9-jre/bin/java) /usr/bin/java11
 
 EXPOSE 9090
 
-CMD ["java", "-jar", "playground_compiler.jar", "--b7a.log.level=ALL"]
+CMD ["java", "-jar", "/api/playground_compiler.jar", "--b7a.log.level=ALL"]
