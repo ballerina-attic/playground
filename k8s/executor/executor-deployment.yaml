@@ -28,6 +28,16 @@ spec:
       - name: ballerina-playground-executor-container
         imagePullPolicy: Always
         image: gcr.io/${BPG_GCP_PROJECT_ID}/playground-executor:${RELEASE_VERSION}
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
         volumeMounts:
         - name: pvc-nfs
           mountPath: "/build-cache"
