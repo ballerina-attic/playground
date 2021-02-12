@@ -32,6 +32,23 @@ service executorService on new http:Listener(9090) {
     }
 }
 
+@http:ServiceConfig {
+    basePath: "/healthz"
+}
+service healthcheck on new http:Listener(8080) {
+    
+    @http:ResourceConfig {
+        methods: ["GET"],
+        path: "/"
+    }
+    resource function get(http:Caller caller, http:Request request) {
+        error? status = caller->respond("Success");
+        if (status is error) {
+            log:printError("Error while responding to caller: " + caller.toString());
+        }
+    }
+}
+
 function respondString(http:WebSocketCaller caller, string response) {
     error? status = caller->pushText(response);
     if (status is error) {
