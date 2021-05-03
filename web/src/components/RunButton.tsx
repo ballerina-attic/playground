@@ -4,9 +4,10 @@ import { PlaygroundContext } from "./Playground";
 
 export function RunButton() {
     return <PlaygroundContext.Consumer>
-                { ({ onRun, runInProgress }) => (<button
+                { ({ onRun, runInProgress, embedded }) => (<button
                         className={cn(
-                            "w3-button w3-white w3-round run-button",
+                            "w3-button w3-white run-button",
+                            { "w3-round": !embedded}
                         )}
                         onClick={runInProgress ? () => undefined : onRun}
                     >
@@ -18,6 +19,8 @@ export function RunButton() {
                         {!runInProgress &&
                             <span>Run</span>
                         }
+                        {embedded && !runInProgress &&
+                            <i className="fa fa-play-circle-o fa-lg" />}
                 </button>)
 
                 }

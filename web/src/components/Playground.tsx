@@ -26,11 +26,12 @@ export interface IPlaygroundContext extends IPlaygroundState {
     updateContext: (newContext: Partial<IPlaygroundContext>) => void;
     onRun: () => void;
     onShare: () => Promise<Gist>;
+    embedded: boolean;
 }
 
 export const PlaygroundContext = React.createContext({} as IPlaygroundContext);
 
-export class Playground extends React.Component<{}, IPlaygroundState> {
+export class Playground extends React.Component<{ embedded? : boolean }, IPlaygroundState> {
 
     constructor(props: {}) {
         super(props);
@@ -73,8 +74,10 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
         return <PlaygroundContext.Provider value={this.createContext()}>
                 <div className="ballerina-playground">
                     <ControlPanel />
-                    <CodeEditor onChange={this.onCodeChange.bind(this)} />
-                    <OutputPanel />
+                    <div className="code-output-wrapper ">
+                        <CodeEditor onChange={this.onCodeChange.bind(this)} />
+                        <OutputPanel />
+                    </div>
                 </div>
         </PlaygroundContext.Provider>;
     }
@@ -177,6 +180,7 @@ export class Playground extends React.Component<{}, IPlaygroundState> {
     private createContext(): IPlaygroundContext {
         return {
             ...this.state,
+            embedded: this.props.embedded,
             onRun: this.onRun.bind(this),
             onShare: this.onShare.bind(this),
             updateContext: (newContext: Partial<IPlaygroundContext>) => {

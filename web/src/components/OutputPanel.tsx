@@ -1,4 +1,5 @@
 import * as React from "react";
+import cn from "classnames";
 import "./OutputPanel.less";
 import { PlaygroundContext } from "./Playground";
 
@@ -51,10 +52,10 @@ export function getOutputMsg(data: string) {
 
 export function OutputPanel() {
     return <PlaygroundContext.Consumer>
-        {({ responses, waitingOnRemoteServer }) => {
+        {({ responses, waitingOnRemoteServer, embedded }) => {
             let inExecutionPhase = false;
             const lastResponse = responses[responses.length - 1];
-            return <div className="output-panel w3-container">
+            return <div className={cn("output-panel w3-container", { "w3-border": embedded })}>
                 {waitingOnRemoteServer &&
                 <div className="control">{createLoadingAnimation("waiting on remote server...")}</div>}
                 {

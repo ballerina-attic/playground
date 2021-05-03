@@ -1,4 +1,5 @@
 import * as React from "react";
+import cn from "classnames";
 import MonacoEditor, { ChangeHandler } from "react-monaco-editor";
 import * as grammar from "./ballerina.monarch.json";
 
@@ -35,7 +36,8 @@ export interface CodeEditorProps {
 export function CodeEditor(props: CodeEditorProps) {
     return <PlaygroundContext.Consumer>
             { (context) => {
-                return <div className="code-editor w3-container">
+                
+                return <div className={cn("code-editor w3-container", { "w3-border": context.embedded })}>
                     <MonacoEditor
                         language={BALLERINA_LANG}
                         value={context.sourceCode}

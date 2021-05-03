@@ -1,5 +1,20 @@
 .control-panel {
     padding: 5px 10px  5px 10px;
+    .embedded & {
+        padding-right: 1px;
+    }
+    &.w3-bottom {
+        display: none;
+        .embedded & {
+            display: block;
+        }
+    }
+    &.w3-top {
+        display: block;
+        .embedded & {
+            display: none;
+        }
+    }
     .w3-button {
         margin-right: 10px;
         height: 40px;
@@ -7,8 +22,21 @@
         background-color: #F2F3F4!important;
         text-align: center;
         min-width: 75px;
+        .embedded & {
+            margin-right: 0px;
+            background-color: #20b6b0!important;
+            color: white!important;
+            float: right;
+            &:hover {
+                background-color: #eeeeee!important;
+                color: #3b3b3b!important;
+            }
+        }
         &:hover {
             background-color: white!important;
+        }
+        i {
+            margin-left: 8px;
         }
         .loading {
             font-size: large;

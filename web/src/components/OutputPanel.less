@@ -1,8 +1,27 @@
 .output-panel {
-    height: 50vh - 46px;
+    height: calc(50vh - 46px);
     padding-top: 15px;
     font-family: "Lucida Console", Monaco, monospace;
     color: #1f1f1f;
+    .embedded & {
+        background-color: #1f1f1f;
+        height: calc(50vh - 60px);
+        &.w3-border {
+            border: 1px solid #20b6b0!important;
+        }
+        .data {
+            &.output {
+               color: #20b6b0; 
+            }
+            color: #20b6b0;
+        }
+        .error {
+            color: rgb(184, 48, 48);
+        }
+        .control {
+            color: gray;
+        }
+    }
     .control {
         color: gray;
     }
