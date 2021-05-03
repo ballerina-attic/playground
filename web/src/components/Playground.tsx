@@ -31,7 +31,7 @@ export interface IPlaygroundContext extends IPlaygroundState {
 
 export const PlaygroundContext = React.createContext({} as IPlaygroundContext);
 
-export class Playground extends React.Component<{ embedded? : boolean }, IPlaygroundState> {
+export class Playground extends React.Component<{ embedded?: boolean }, IPlaygroundState> {
 
     constructor(props: {}) {
         super(props);

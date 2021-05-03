@@ -7,7 +7,7 @@ export function RunButton() {
                 { ({ onRun, runInProgress, embedded }) => (<button
                         className={cn(
                             "w3-button w3-white run-button",
-                            { "w3-round": !embedded}
+                            { "w3-round": !embedded},
                         )}
                         onClick={runInProgress ? () => undefined : onRun}
                     >
