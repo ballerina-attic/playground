@@ -1,8 +1,28 @@
 .output-panel {
-    height: 50vh - 46px;
+    height: calc(50vh - 46px);
     padding-top: 15px;
     font-family: "Lucida Console", Monaco, monospace;
-    color: #585a5e;
+    color: #1f1f1f;
+    overflow-y: scroll;
+    .embedded & {
+        background-color: #585a5e ;
+        height: calc(50vh - 60px);
+        &.w3-border {
+            border: 1px solid #20b6b0!important;
+        }
+        .data {
+            &.output {
+               color: #3ad1ca  ; 
+            }
+            color: #3ad1ca ;
+        }
+        .error {
+            color: rgb(233, 115, 115);
+        }
+        .control {
+            color: rgb(231, 231, 231);
+        }
+    }
     .control {
         color: gray;
     }
@@ -29,14 +49,6 @@
             animation-delay: .4s;
         }
     }
-}
-
-.embedded .output-panel {
-    background-color: #f5f6f6 !important;
-}
-
-.embedded .output-panel .data {
-    background-color: #00000 !important;
 }
 
 @keyframes blink {

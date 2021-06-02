@@ -1,4 +1,10 @@
 import * as React from "react";
+import { Playground } from "../../src/components/Playground";
 import "./Playground.less";
 
-export const EmbeddedPlayground = () => <h1>Embedded Playground</h1>;
+export const EmbeddedPlayground = () => (
+
+    <div className="embedded">
+        <Playground embedded={true} />
+    </div>
+    );
