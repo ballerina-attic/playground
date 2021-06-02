@@ -7,9 +7,9 @@ COPY api/*.jar /api
 
 WORKDIR /ballerina
 
-ADD https://dist.ballerina.io/downloads/swan-lake-alpha1/ballerina-swan-lake-alpha1.zip /ballerina/dist/
+ADD ballerina-swan-lake-beta1.zip /ballerina/dist/
 
-RUN unzip /ballerina/dist/ballerina-swan-lake-alpha1.zip -d /ballerina/ \
+RUN unzip /ballerina/dist/ballerina-swan-lake-beta1.zip -d /ballerina/ \
     && mv /ballerina/ballerina* /ballerina/runtime
 
 ENV BALLERINA_HOME /ballerina/runtime
