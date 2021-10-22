@@ -46,7 +46,7 @@ task clean(type: Delete) {
 task cloudBuild(type: Exec) {
     dependsOn clean
     dependsOn copyApi
-    dependsOn copyCompilerPlugins
+    // dependsOn copyCompilerPlugins: FIXME Re-enable after updating service check compiler plugin to beta3
     inputs.files(inputFiles)
     environment("BALLERINA_VERSION", project.ext.ballerinaVersion)
     commandLine "gcloud", "builds", "submit", "--config", "cloudbuild.yaml",
@@ -56,7 +56,7 @@ task cloudBuild(type: Exec) {
 task build(type: Exec) {
     dependsOn clean
     dependsOn copyApi
-    dependsOn copyCompilerPlugins
+    // dependsOn copyCompilerPlugins: FIXME Re-enable after updating service check compiler plugin to beta3
     inputs.files(inputFiles)
     commandLine 'docker', 'build', '-t', imageTag,
             '--build-arg', 'BALLERINA_VERSION=' + project.ext.ballerinaVersion, '.'
