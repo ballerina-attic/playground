@@ -8,7 +8,7 @@ function getAppJar(string cacheId) returns string|error {
     if (file:exists(buildCacheDir)) {
         string cachedBuildDir = check filepath:build(buildCacheDir, cacheId);
         string cachedAppPath = check filepath:build(buildCacheDir, cacheId, "app.jar");
-        if (file:exists(cachedBuildDir)) {
+        if (file:exists(cachedAppPath)) {
             return cachedAppPath;
         } 
         return file:FileNotFoundError(message = "Cannot find " + cachedAppPath);
@@ -24,6 +24,7 @@ function execute(ExecuteData data, ResponseHandler respHandler) returns error? {
     log:printDebug("Executing jar: " + appJar);
     string cwd = check filepath:parent(appJar);
     check execJar(cwd, appJar, respHandler);
+    // check file:remove(appJar);
 }
 
 function createStringResponse(ExecutorResponse reponse) returns string|error {
