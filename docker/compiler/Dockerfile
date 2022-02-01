@@ -7,9 +7,9 @@ COPY api/*.jar /api
 
 WORKDIR /ballerina
 
-ADD https://dist.ballerina.io/downloads/swan-lake-beta5/ballerina-swan-lake-beta5.zip /ballerina/dist/
+ADD https://dist.ballerina.io/downloads/swan-lake-beta6/ballerina-swan-lake-beta6.zip /ballerina/dist/
 
-RUN unzip /ballerina/dist/ballerina-swan-lake-beta5.zip -d /ballerina/ \
+RUN unzip /ballerina/dist/ballerina-swan-lake-beta6.zip -d /ballerina/ \
     && mv /ballerina/ballerina* /ballerina/runtime
 
 ADD choreo-compiler-security-plugin-0.3.1.jar /ballerina/runtime/bre/libs
