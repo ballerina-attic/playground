@@ -4,11 +4,7 @@ metadata:
   name: letsencrypt-staging
 spec:
   acme:
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
     email: techops@wso2.com
     privateKeySecretRef:
       name: letsencrypt-staging
-    solvers:
-      - http01:
-          ingress:
-            class: nginx
