@@ -1,5 +1,5 @@
 - controller: gcr.io/ballerina-playground-200609/playground-controller:1.0.0-20200324064120
-- compiler: gcr.io/ballerina-playground-200609/playground-compiler:1.1.0-20221024113002
+- compiler: gcr.io/ballerina-playground-200609/playground-compiler:1.1.0-20221109170828
 - executor: gcr.io/ballerina-playground-200609/playground-executor:1.1.0-20210210230510
 - gists: gcr.io/ballerina-playground-200609/playground-gists-api:1.0.0-20200324065201
 - web: gcr.io/ballerina-playground-200609/playground-web:1.0.0-20200324095704
