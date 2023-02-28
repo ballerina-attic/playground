@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: playground-ingress
@@ -18,22 +18,37 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: ballerina-playground-webserver-service
-          servicePort: 80
+          service:
+            name: ballerina-playground-webserver-service
+            port:
+              number: 80
       - path: /compiler
+        pathType: Prefix
         backend:
-          serviceName: ballerina-playground-compiler-service
-          servicePort: 80
+          service:
+            name: ballerina-playground-compiler-service
+            port:
+              number: 80
       - path: /controller
+        pathType: Prefix
         backend:
-          serviceName: ballerina-playground-controller-service
-          servicePort: 80
+          service:
+            name: ballerina-playground-controller-service
+            port:
+              number: 80
       - path: /executor
+        pathType: Prefix
         backend:
-          serviceName: ballerina-playground-executor-service
-          servicePort: 80
+          service:
+            name: ballerina-playground-executor-service
+            port:
+              number: 80
       - path: /gists
+        pathType: Prefix
         backend:
-          serviceName: ballerina-playground-gists-service
-          servicePort: 80
+          service:
+            name: ballerina-playground-gists-service
+            port:
+              number: 80
