@@ -1,5 +1,5 @@
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 metadata:
   name: letsencrypt-prod
 spec:
@@ -8,4 +8,7 @@ spec:
     email: techops@wso2.com
     privateKeySecretRef:
       name: letsencrypt-prod
-    http01: {}
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
